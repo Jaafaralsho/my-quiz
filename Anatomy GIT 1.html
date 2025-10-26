@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USMLE-Style Quiz: The Peritoneal Sac</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load Heroicons for tooltips -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.1/24/solid/css/heroicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111827; } /* gray-900 */
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; } /* gray-700 */
+        ::-webkit-scrollbar-thumb:hover { background: #4B5563; } /* gray-600 */
+        /* Disabled buttons */
+        .option-btn:disabled { opacity: 0.8; cursor: not-allowed; }
+        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* Explanation colors */
+        .explanation-correct { border-color: #34D399; } /* green-400 */
+        .explanation-incorrect { border-color: #F87171; } /* red-400 */
+        /* EMQ buttons */
+        .emq-option-btn { width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; padding: 0; margin-right: 0.5rem; margin-bottom: 0.5rem; }
+        /* Progress Bar */
+        #progress-bar-container { position: fixed; top: 0; left: 0; right: 0; height: 8px; background-color: #374151; z-index: 50; } /* gray-700 */
+        #progress-bar { height: 100%; background-color: #3B82F6; width: 0%; transition: width 0.3s ease-out; } /* blue-500 */
+        /* Difficulty Badges */
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-easy { background-color: #10B981; color: #ffffff; } /* green-500 */
+        .badge-moderate { background-color: #F59E0B; color: #1F2937; } /* yellow-500, gray-800 */
+        .badge-hard { background-color: #EF4444; color: #ffffff; } /* red-500 */
+        /* Reference Tooltip */
+        .reference-tooltip { position: relative; display: inline-block; cursor: help; }
+        .reference-tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: #1F2937; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; border: 1px solid #4B5563; font-size: 0.875rem; font-weight: 400; } /* gray-800, gray-600 */
+        .reference-tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen p-4 md:p-8 pt-10"> <!-- Adjusted pt to clear progress bar -->
+
+    <!-- Progress Bar -->
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Header -->
+        <header class="text-center py-4 mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">USMLE-Style Clinical Anatomy Quiz</h1>
+            <p class="text-lg text-gray-400">The Peritoneal Sac</p>
+        </header>
+
+        <!-- Score Container (Initially Hidden) -->
+        <div id="score-container" class="hidden bg-gray-800 p-6 rounded-lg shadow-xl mb-6 text-center">
+            <h2 class="text-2xl font-bold text-white">Quiz Complete!</h2>
+            <p class="text-3xl font-bold text-blue-400 my-4" id="score-text"></p>
+            <div class="flex justify-center gap-4">
+                <button id="review-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+                    Review Answers
+                </button>
+                <button id="restart-btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+                    Restart Quiz
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="space-y-6">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+
+        <!-- Pagination Container -->
+        <div id="pagination-container" class="flex justify-between items-center mt-8">
+            <!-- Pagination buttons will be dynamically inserted here -->
+        </div>
+
+    </div>
+
+    <script>
+        // Questions Array for Peritoneal Sac (3rd-Year Medical Student Level)
+        let allQuestions = [
+            // =================================================================
+            // === 12 High-Yield Clinical Questions ===
+            // =================================================================
+            {
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A 38-year-old male presents to the ED with a stab wound to the left upper quadrant. He exhibits guarding and exquisite tenderness to palpation, which worsens significantly with cough or movement.",
+                question: "This type of pain is characteristic of irritation of which structure?",
+                options: [
+                    "Visceral peritoneum",
+                    "Parietal peritoneum",
+                    "The greater omentum",
+                    "Retroperitoneal fascia"
+                ],
+                answer: 1,
+                explanation: "Irritation of the parietal peritoneum, innervated by somatic nerves (T7-L1, obturator), causes sharp, localized pain that is exacerbated by movement (rebound tenderness, guarding). Visceral pain is dull and poorly localized.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 38",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "During a laparoscopic appendectomy, the surgeon insufflates CO2 into the main, larger portion of the peritoneal cavity. A subsequent procedure requires entry into the omental bursa.",
+                question: "Which structure must be traversed to move from the greater sac to the lesser sac?",
+                options: [
+                    "The gastrocolic ligament",
+                    "The hepatoduodenal ligament",
+                    "The omental foramen",
+                    "The transverse mesocolon"
+                ],
+                answer: 2,
+                explanation: "The omental foramen (also known as the epiploic foramen or foramen of Winslow) is the natural communication between the greater sac (the main cavity) and the lesser sac (omental bursa).",
+                reference: "Ref: Peritoneal Sac PDF, Pg 7, 18, 19",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A 55-year-old male with liver cirrhosis develops ascites. When the patient is supine, fluid will preferentially collect in the most dependent parts of the greater sac.",
+                question: "Which of the following is the most dependent portion of the peritoneal cavity in a supine individual?",
+                options: [
+                    "Hepatorenal recess",
+                    "Left paracolic gutter",
+                    "Rectovesical pouch",
+                    "Splenorenal recess"
+                ],
+                answer: 0,
+                explanation: "In the supine position, the hepatorenal recess (also known as Morison's pouch) is the most dependent part of the supramesocolic compartment and a common site for fluid collection. The rectovesical/recto-uterine pouch is the most dependent in the standing position.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 33-34",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "During a complicated cholecystectomy, the surgeon encounters brisk bleeding. To control it, the Pringle maneuver is performed by clamping the hepatoduodenal ligament.",
+                question: "Which structure, *not* part of the portal triad, is also contained within this ligament and must be avoided?",
+                options: [
+                    "Cystic artery",
+                    "Gastroduodenal artery",
+                    "Autonomic nerve fibers",
+                    "Right gastric artery"
+                ],
+                answer: 2,
+                explanation: "The hepatoduodenal ligament contains the portal triad (portal vein, hepatic artery proper, bile duct) as well as lymphatic vessels and autonomic nerve fibers. The other arteries are nearby but not typically within the free edge clamped.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 27",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A 60-year-old female undergoes surgery for a perforated sigmoid diverticulitis. The surgeon notes that a large, fatty peritoneal fold has adhered to the inflamed colonic segment.",
+                question: "This structure, which is attempting to 'wall off' the infection, is derived from which embryonic structure?",
+                options: [
+                    "Ventral mesentery",
+                    "Dorsal mesentery",
+                    "Septum transversum",
+                    "Yolk sac"
+                ],
+                answer: 1,
+                explanation: "The structure is the greater omentum. The greater omentum is a derivative of the embryonic dorsal mesentery (specifically, the dorsal mesogastrium).",
+                reference: "Ref: Peritoneal Sac PDF, Pg 10, 26, 41",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A 19-year-old male presents with a 12-hour history of dull, achy pain in his periumbilical region, which has now migrated to become a sharp, constant pain at McBurney's point.",
+                question: "The initial, poorly localized periumbilical pain is mediated by afferent fibers traveling with which nerves?",
+                options: [
+                    "Somatic afferents of the T10 intercostal nerve",
+                    "Visceral afferents accompanying sympathetic nerves (T10)",
+                    "Visceral afferents accompanying parasympathetic nerves (Vagus)",
+                    "Somatic afferents of the iliohypogastric nerve"
+                ],
+                answer: 1,
+                explanation: "The initial visceral pain of appendicitis is referred to the T10 dermatome (periumbilical) and travels via visceral afferents accompanying sympathetic nerves. The later, sharp pain is from parietal peritoneal irritation (somatic).",
+                reference: "Ref: Peritoneal Sac PDF, Pg 38",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "A trauma patient sustains a blunt abdominal injury, resulting in a hematoma. A CT scan reveals the hematoma is confined to the retroperitoneal space, displacing the ascending colon anteriorly.",
+                question: "Which of the following organs is classified as secondarily retroperitoneal?",
+                options: [
+                    "Spleen",
+                    "Kidney",
+                    "Pancreas",
+                    "Abdominal aorta"
+                ],
+                answer: 2,
+                explanation: "The pancreas (except the tail) is secondarily retroperitoneal, meaning it was intraperitoneal during development but its mesentery later fused with the posterior body wall. The kidneys and aorta are primarily retroperitoneal. The spleen is intraperitoneal.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 35, 36",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "A surgeon is performing a small bowel resection. The jejunum and ileum are easily mobilized due to their suspension by a large, fan-shaped peritoneal fold.",
+                question: "The root of this mesentery extends from the duodenojejunal flexure to the ileocecal junction, crossing which of the following retroperitoneal structures?",
+                options: [
+                    "Left kidney",
+                    "Spleen",
+                    "Head of the pancreas",
+                    "Right ureter"
+                ],
+                answer: 3,
+                explanation: "The root of the mesentery is about 15 cm long and crosses the 3rd part of the duodenum, abdominal aorta, IVC, right psoas major, and the right ureter. The left kidney and spleen are superior, and the head of the pancreas is crossed by the transverse mesocolon.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 29",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A 28-year-old female presents with signs of a ruptured ectopic pregnancy. She is in the sitting position, and the surgeon suspects hemoperitoneum. A culdocentesis (needle aspiration) is planned.",
+                question: "To retrieve the blood, the needle should be inserted through the posterior vaginal fornix into which space?",
+                options: [
+                    "Vesico-uterine pouch",
+                    "Recto-uterine pouch",
+                    "Hepatorenal recess",
+                    "Pararectal fossa"
+                ],
+                answer: 1,
+                explanation: "The recto-uterine pouch (also known as the pouch of Douglas) is the most dependent part of the female peritoneal cavity, located between the uterus and rectum. It is accessible via the posterior vaginal fornix for culdocentesis.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 34",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A surgeon needs to expose the body and tail of the pancreas. They opt to enter the lesser sac (omental bursa) by incising the peritoneal fold connecting the greater curvature of the stomach to the transverse colon.",
+                question: "Which ligament is being incised?",
+                options: [
+                    "Gastrocolic ligament",
+                    "Gastrosplenic ligament",
+                    "Hepatogastric ligament",
+                    "Phrenicocolic ligament"
+                ],
+                answer: 0,
+                explanation: "The gastrocolic ligament is the portion of the greater omentum that stretches from the stomach's greater curvature to the transverse colon. Incising it provides wide access to the lesser sac, anterior to the pancreas.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 26",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "A patient with a perforated duodenal ulcer develops peritonitis. Fluid from the ulcer is noted in the lesser sac. The fluid then leaks into the greater sac.",
+                question: "Which of the following structures forms the *superior* boundary of the omental (epiploic) foramen, the passageway for this fluid?",
+                options: [
+                    "Hepatoduodenal ligament",
+                    "First part of the duodenum",
+                    "Caudate lobe of the liver",
+                    "Inferior vena cava"
+                ],
+                answer: 2,
+                explanation: "The boundaries of the omental foramen are: ANTERIOR - Hepatoduodenal ligament; POSTERIOR - IVC; INFERIOR - First part of the duodenum; SUPERIOR - Caudate lobe of the liver.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 19",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "A surgeon exploring the abdomen notes that the transverse colon is suspended by a mesentery, while the ascending and descending colon are fixed to the posterior body wall.",
+                question: "The ascending and descending colon are classified as 'secondarily retroperitoneal'. What does this imply about their arterial supply?",
+                options: [
+                    "Their arteries are also retroperitoneal and do not run in a mesentery.",
+                    "They have a dual blood supply from the aorta and posterior wall.",
+                    "Their arteries originate anteriorly from the aorta and run retroperitoneally to reach them.",
+                    "They lack a true mesentery and are supplied by segmental vessels."
+                ],
+                answer: 2,
+                explanation: "Secondarily retroperitoneal organs (like ascending/descending colon and pancreas) were once intraperitoneal. They dragged their mesenteric blood vessels (e.g., colic arteries from SMA/IMA) with them as their mesentery fused to the posterior wall. Thus, their arteries originate anteriorly but travel retroperitoneally.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 35, 36",
+                userAnswer: undefined
+            },
+            // =================================================================
+            // === 8 Very Hard Questions ===
+            // =================================================================
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI, but represents "Very Hard"
+                vignette: "A surgeon is performing a splenectomy and incises the gastrosplenic ligament to mobilize the spleen. An assistant retracts the stomach anteriorly.",
+                question: "This maneuver exposes the lateral-most recess of the lesser sac. Which structure, containing the splenic vessels, forms the posterior wall of this recess and connects the spleen to the posterior body wall?",
+                options: [
+                    "Splenorenal ligament",
+                    "Phrenicocolic ligament",
+                    "Transverse mesocolon",
+                    "Gastrophrenic ligament"
+                ],
+                answer: 0,
+                explanation: "The lesser sac extends to the left to the hilum of the spleen. The gastrosplenic ligament forms its anterior boundary on the left, and the splenorenal (lienorenal) ligament forms its posterior boundary, containing the splenic vessels and tail of the pancreas.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 18, 22, 23, 25",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI
+                vignette: "A neonate presents with a congenital defect where the liver is not attached to the anterior abdominal wall. This defect is due to a failure of development of a specific embryonic structure.",
+                question: "The falciform ligament, which is absent in this patient, and the lesser omentum are both derivatives of the:",
+                options: [
+                    "Dorsal mesogastrium",
+                    "Ventral mesogastrium",
+                    "Septum transversum",
+                    "Lateral plate mesoderm"
+                ],
+                answer: 1,
+                explanation: "The liver grows into the embryonic ventral mesentery (or ventral mesogastrium), dividing it into the falciform ligament (liver to anterior wall) and the lesser omentum (liver to stomach/duodenum). The septum transversum forms the diaphragm's central tendon.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 8, 13, 26, 27",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI
+                vignette: "A patient with portal hypertension and splenomegaly is evaluated for surgery. The surgeon plans to ligate the short gastric arteries.",
+                question: "To access these vessels, the surgeon must incise which peritoneal ligament?",
+                options: [
+                    "Gastrocolic ligament",
+                    "Hepatogastric ligament",
+                    "Splenorenal ligament",
+                    "Gastrosplenic ligament"
+                ],
+                answer: 3,
+                explanation: "The short gastric arteries are branches of the splenic artery that travel within the gastrosplenic ligament (part of the greater omentum) to supply the fundus of the stomach. This ligament connects the spleen's hilum to the stomach's greater curvature.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 22, 23, 25",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI
+                vignette: "A surgeon performing an abdominal aortic aneurysm (AAA) repair exposes the aorta, which is a *primary* retroperitoneal structure. During this exposure, several *secondarily* retroperitoneal structures are mobilized.",
+                question: "Which of the following structures, mobilized during the exposure, is secondarily retroperitoneal?",
+                options: [
+                    "Left kidney",
+                    "Third part of the duodenum",
+                    "Inferior vena cava",
+                    "Left ureter"
+                ],
+                answer: 1,
+                explanation: "The 2nd, 3rd, and 4th parts of the duodenum are secondarily retroperitoneal. The kidneys, ureters, IVC, and aorta are all primarily retroperitoneal (they developed and remained in the retroperitoneal space).",
+                reference: "Ref: Peritoneal Sac PDF, Pg 35, 36",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI
+                vignette: "A 34-year-old female with a history of pelvic inflammatory disease presents with a pelvic abscess. She complains of persistent, achy pain along the medial aspect of her right thigh.",
+                question: "This referred pain is caused by irritation of the pelvic parietal peritoneum, which is innervated by which nerve?",
+                options: [
+                    "Genitofemoral nerve",
+                    "Femoral nerve",
+                    "Obturator nerve",
+                    "Ilioinguinal nerve"
+                ],
+                answer: 2,
+                explanation: "The obturator nerve (L2-L4) innervates the parietal peritoneum on the lateral pelvic wall as it descends to the obturator foramen. It also supplies cutaneous innervation to the medial thigh. Irritation of the nerve in the pelvis can be referred as pain in its cutaneous distribution.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 38",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI
+                vignette: "A 50-year-old male develops a subphrenic abscess following a splenectomy. He presents with severe pain in his left shoulder tip (Kehr's sign).",
+                question: "This referred pain is mediated by somatic afferent fibers traveling within which nerve?",
+                options: [
+                    "Vagus nerve (CN X)",
+                    "Lower intercostal nerves (T7-T11)",
+                    "Phrenic nerve",
+                    "Suprascapular nerve (C5, C6)"
+                ],
+                answer: 2,
+                explanation: "The central part of the diaphragmatic peritoneum is innervated by the phrenic nerve. The phrenic nerve's roots (C3-C5) are the same that form the supraclavicular nerves, which supply the shoulder. Irritation of the central diaphragm is thus referred to the shoulder tip.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 38 (Implied)",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI
+                vignette: "A patient has a ruptured appendix, and purulent fluid is found in the right paracolic gutter. The surgeon is concerned about the potential for this fluid to spread superiorly.",
+                question: "Which structure limits the superior spread of fluid in the *left* paracolic gutter but is absent on the right, allowing fluid to track to the hepatorenal recess?",
+                options: [
+                    "Splenorenal ligament",
+                    "Phrenicocolic ligament",
+                    "Transverse mesocolon",
+                    "Left triangular ligament"
+                ],
+                answer: 1,
+                explanation: "The right paracolic gutter is continuous with the hepatorenal recess (Morison's pouch). The left paracolic gutter is limited superiorly by the phrenicocolic ligament, which tethers the splenic flexure of the colon to the diaphragm, preventing easy spread to the subphrenic space.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 31, 33",
+                userAnswer: undefined
+            },
+            {
+                type: "mcq",
+                difficulty: "Hard", // "Hard" in UI
+                vignette: "A CT scan with oral contrast shows the infracolic compartment, which is divided into right and left spaces.",
+                question: "Which peritoneal fold separates the right and left infracolic spaces and guides the flow of fluid from the small bowel?",
+                options: [
+                    "Transverse mesocolon",
+                    "Sigmoid mesocolon",
+                    "The mesentery",
+                    "Median umbilical fold"
+                ],
+                answer: 2,
+                explanation: "The infracolic compartment (below the transverse mesocolon) is divided into the right and left infracolic spaces by the root of the mesentery (proper, of the small intestine). Fluid from the jejunum tends to track to the left infracolic space, while fluid from the ileum tracks to the right.",
+                reference: "Ref: Peritoneal Sac PDF, Pg 28, 29, 31",
+                userAnswer: undefined
+            }
+        ];
+
+        let totalAnsweredCount = 0;
+        let currentPage = 1;
+        const questionsPerPage = 10; // Set to 10 questions per page
+        let totalQuestionCount = 0; // Will be calculated
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const quizContainer = document.getElementById('quiz-container');
+            const paginationContainer = document.getElementById('pagination-container');
+            const scoreContainer = document.getElementById('score-container');
+            const scoreText = document.getElementById('score-text');
+            const restartBtn = document.getElementById('restart-btn');
+            const reviewBtn = document.getElementById('review-btn');
+            const progressBar = document.getElementById('progress-bar');
+
+            if (!quizContainer || !paginationContainer || !scoreContainer || !scoreText || !restartBtn || !reviewBtn || !progressBar) {
+                console.error("Error: Critical DOM elements missing.");
+                return;
+            }
+
+            function getTotalQuestions() {
+                return allQuestions.reduce((total, q) => {
+                     if (!q || !q.type) return total;
+                     return total + (q.type === 'emq_set' ? (q.questions || []).length : 1);
+                 }, 0);
+            }
+
+            function updateProgressBar() {
+                 totalQuestionCount = getTotalQuestions(); 
+                if (totalQuestionCount === 0) return;
+                 const currentAnswered = Math.min(totalAnsweredCount, totalQuestionCount);
+                const percentage = (currentAnswered / totalQuestionCount) * 100;
+                progressBar.style.width = `${percentage}%`;
+            }
+
+            function renderQuiz() {
+                quizContainer.innerHTML = '';
+                 totalQuestionCount = getTotalQuestions();
+                 const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                 if (currentPage < 1) currentPage = 1;
+                 if (currentPage > pageCount && pageCount > 0) currentPage = pageCount;
+
+                const startIndex = (currentPage - 1) * questionsPerPage;
+                const endIndex = Math.min(startIndex + questionsPerPage, allQuestions.length);
+
+                console.log(`Rendering page ${currentPage}/${pageCount}, indices ${startIndex}-${endIndex-1}`);
+
+                if (!Array.isArray(allQuestions)) {
+                    console.error("allQuestions is not an array!");
+                    return; 
+                }
+
+                allQuestions.slice(startIndex, endIndex).forEach((q, pageQIndex) => {
+                     if (!q) {
+                         console.error(`Missing question data at index ${startIndex + pageQIndex}`);
+                         return; 
+                     }
+                    const globalQIndex = startIndex + pageQIndex;
+                    const qBlock = document.createElement('div');
+                    qBlock.id = `q-${globalQIndex}`;
+                    const baseBg = (q.type === 'emq_set') ? 'bg-gray-700' : 'bg-gray-800';
+                    qBlock.className = `${baseBg} rounded-lg shadow-xl p-6 transition-all duration-300`;
+
+                    if (q.type === 'emq_set') {
+                        renderEMQBlock(q, globalQIndex, qBlock);
+                    } else if (q.type === 'mcq') { 
+                        renderMCQBlock(q, globalQIndex, qBlock);
+                    } else {
+                        console.warn(`Unknown question type "${q.type}" at index ${globalQIndex}`);
+                        qBlock.textContent = `Error: Unknown question type at index ${globalQIndex}.`;
+                    }
+                    quizContainer.appendChild(qBlock);
+                });
+                renderPagination();
+                updateProgressBar(); 
+            }
+
+            function createDifficultyBadge(difficulty) {
+                const badge = document.createElement('span');
+                let badgeClass = 'badge-moderate'; // Default to moderate
+                if (difficulty === 'Hard') badgeClass = 'badge-hard';
+                badge.className = `badge ${badgeClass} mb-4`;
+                badge.textContent = difficulty || 'Moderate'; 
+                return badge;
+            }
+
+            function createReference(refText) {
+                if (!refText) return document.createDocumentFragment(); 
+                const refContainer = document.createElement('div');
+                refContainer.className = 'reference-tooltip mt-3';
+                const refLink = document.createElement('span');
+                refLink.className = 'text-blue-400 text-sm font-medium cursor-help inline-flex items-center gap-1';
+                refLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" /></svg>Ref`;
+                const tooltipText = document.createElement('span');
+                tooltipText.className = 'tooltip-text';
+                tooltipText.textContent = refText;
+                refContainer.appendChild(refLink);
+                refContainer.appendChild(tooltipText);
+                return refContainer;
+            }
+
+             function renderMCQBlock(questionData, globalQIndex, qBlock) {
+                 if (!questionData || !Array.isArray(questionData.options)) { 
+                     console.error(`Invalid MCQ data at index ${globalQIndex}`);
+                     qBlock.textContent = 'Error loading question.';
+                     return;
+                 }
+
+                 qBlock.appendChild(createDifficultyBadge(questionData.difficulty));
+                 const vignetteEl = document.createElement('p');
+                 vignetteEl.className = 'text-gray-300 mb-4 text-base';
+                 vignetteEl.textContent = questionData.vignette || '';
+                 const questionEl = document.createElement('p');
+                 questionEl.className = 'text-lg font-semibold text-white mb-6';
+                 questionEl.textContent = `Q ${globalQIndex + 1}. ${questionData.question || 'Missing question text'}`;
+                 qBlock.appendChild(vignetteEl);
+                 qBlock.appendChild(questionEl);
+                 const optionsContainer = document.createElement('div');
+                 optionsContainer.className = 'space-y-3';
+
+                 questionData.options.forEach((option, oIndex) => {
+                     const optionBtn = document.createElement('button');
+                     optionBtn.className = 'option-btn w-full text-left p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500';
+                     optionBtn.textContent = `${String.fromCharCode(65 + oIndex)}. ${option}`;
+                     optionBtn.onclick = () => checkMCQAnswer(globalQIndex, oIndex);
+                     if (questionData.userAnswer !== undefined && questionData.userAnswer !== null) {
+                         optionBtn.disabled = true;
+                         optionBtn.classList.remove('hover:bg-gray-600');
+                     }
+                     optionsContainer.appendChild(optionBtn);
+                 });
+
+                 qBlock.appendChild(optionsContainer);
+                 createAndAppendFeedbackElements(qBlock, globalQIndex, 'mcq', questionData);
+
+                 if (questionData.userAnswer !== undefined && questionData.userAnswer !== null) {
+                    showMCQAnswerFeedback(globalQIndex, true); 
+                 }
+            }
+
+             function renderEMQBlock(emqSet, baseIndex, qBlock) {
+                 if (!emqSet || !Array.isArray(emqSet.options) || !Array.isArray(emqSet.questions)) {
+                     console.error(`Invalid EMQ data at index ${baseIndex}`);
+                     qBlock.textContent = 'Error loading question set.';
+                     return;
+                 }
+
+                 qBlock.appendChild(createDifficultyBadge(emqSet.difficulty));
+                 const vignetteEl = document.createElement('p');
+                 vignetteEl.className = 'text-gray-300 mb-4 text-base';
+                 vignetteEl.textContent = emqSet.vignette || '';
+                 const optionsTitle = document.createElement('h3');
+                 optionsTitle.className = 'text-lg font-semibold text-white mb-3';
+                 optionsTitle.textContent = `Question Set ${baseIndex + 1}: Option List`;
+                 const optionsList = document.createElement('ul');
+                 optionsList.className = 'list-none pl-5 mb-6 space-y-2';
+
+                 emqSet.options.forEach((option, oIndex) => {
+                     const li = document.createElement('li'); li.className = 'text-gray-300';
+                     li.textContent = `${String.fromCharCode(65 + oIndex)}. ${option}`; optionsList.appendChild(li);
+                 });
+                 qBlock.appendChild(vignetteEl); qBlock.appendChild(optionsTitle); qBlock.appendChild(optionsList);
+                 const subQuestionsContainer = document.createElement('div');
+                 subQuestionsContainer.className = 'space-y-6 border-t border-gray-600 pt-6';
+
+                 emqSet.questions.forEach((subQ, subQIndex) => {
+                     if (!subQ) {
+                         console.error(`Invalid sub-question data at index ${baseIndex}-${subQIndex}`);
+                         return; 
+                     }
+                     const subQBlock = document.createElement('div');
+                     subQBlock.id = `q-${baseIndex}-${subQIndex}`;
+                     subQBlock.className = 'border-l-4 border-gray-500 pl-4';
+                     const questionEl = document.createElement('p');
+                     questionEl.className = 'text-md font-semibold text-white mb-4';
+                     questionEl.textContent = `Question ${baseIndex + 1}.${subQIndex + 1}: ${subQ.question || 'Missing question text'}`;
+                     subQBlock.appendChild(questionEl);
+                     const optionsContainer = document.createElement('div'); optionsContainer.className = 'flex flex-wrap';
+
+                     emqSet.options.forEach((option, oIndex) => { 
+                         const optionBtn = document.createElement('button');
+                         optionBtn.className = 'option-btn emq-option-btn bg-gray-600 hover:bg-gray-500 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500';
+                         optionBtn.textContent = String.fromCharCode(65 + oIndex);
+                         optionBtn.onclick = () => checkEMQAnswer(baseIndex, subQIndex, oIndex);
+                         if (subQ.userAnswer !== undefined && subQ.userAnswer !== null) {
+                             optionBtn.disabled = true;
+                             optionBtn.classList.remove('hover:bg-gray-500');
+                         }
+                         optionsContainer.appendChild(optionBtn);
+                     });
+                     subQBlock.appendChild(optionsContainer);
+                     createAndAppendFeedbackElements(subQBlock, `${baseIndex}-${subQIndex}`, 'emq', subQ);
+                     subQuestionsContainer.appendChild(subQBlock);
+
+                     if (subQ.userAnswer !== undefined && subQ.userAnswer !== null) {
+                        showEMQAnswerFeedback(baseIndex, subQIndex, true); 
+                     }
+                 });
+                 qBlock.appendChild(subQuestionsContainer);
+            }
+
+            function createAndAppendFeedbackElements(parentBlock, indexSuffix, typePrefix, questionData) {
+                 if (!questionData) return;
+
+                const feedbackContainer = document.createElement('div');
+                feedbackContainer.id = `${typePrefix}-feedback-${indexSuffix}`;
+                feedbackContainer.className = 'mt-4 hidden';
+
+                const resultEl = document.createElement('h3');
+                resultEl.id = `${typePrefix}-result-${indexSuffix}`;
+                resultEl.className = 'text-xl font-bold mb-3';
+                feedbackContainer.appendChild(resultEl);
+
+                const showExplanationBtn = document.createElement('button');
+                showExplanationBtn.id = `${typePrefix}-show-exp-btn-${indexSuffix}`;
+                showExplanationBtn.className = 'text-blue-400 hover:text-blue-300 font-medium text-sm hidden'; // Start hidden
+                showExplanationBtn.textContent = 'Show Explanation';
+
+                const explanationContainer = document.createElement('div');
+                explanationContainer.id = `${typePrefix}-explanation-container-${indexSuffix}`;
+                explanationContainer.className = 'mt-4 hidden'; // Start hidden
+
+                const explanationEl = document.createElement('p');
+                explanationEl.id = `${typePrefix}-explanation-${indexSuffix}`;
+                const parentBg = parentBlock && parentBlock.classList.contains('bg-gray-700') ? 'bg-gray-800/50' : 'bg-gray-700/50';
+                explanationEl.className = `${parentBg} border-l-4 p-4 rounded-r-md text-gray-300 transition-colors`;
+                explanationEl.textContent = questionData.explanation || 'No explanation provided.'; // Default text
+                explanationContainer.appendChild(explanationEl);
+
+                if (questionData.reference) explanationContainer.appendChild(createReference(questionData.reference));
+                if (questionData.highYieldTip) {
+                    const tipEl = document.createElement('div');
+                    tipEl.className = 'mt-4 p-3 bg-blue-900/50 border-l-4 border-blue-400 rounded-r-md text-blue-100 text-sm';
+                    tipEl.textContent = questionData.highYieldTip;
+                    explanationContainer.appendChild(tipEl);
+                }
+
+                showExplanationBtn.onclick = () => {
+                    const isHidden = explanationContainer.classList.toggle('hidden');
+                    showExplanationBtn.textContent = isHidden ? 'Show Explanation' : 'Hide Explanation';
+                };
+
+                parentBlock.appendChild(feedbackContainer);
+                parentBlock.appendChild(showExplanationBtn); 
+                parentBlock.appendChild(explanationContainer);
+            }
+
+             function renderPagination() {
+                paginationContainer.innerHTML = '';
+                paginationContainer.className = 'flex justify-between items-center mt-8';
+                 totalQuestionCount = getTotalQuestions();
+                const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                const allAnswered = totalAnsweredCount >= totalQuestionCount;
+
+                if (pageCount <= 0) return; // No questions
+
+                // Previous Button
+                const prevBtn = createButton('prev-btn', 'Previous', () => changePage(currentPage - 1), ['bg-blue-600', 'hover:bg-blue-500']);
+                prevBtn.disabled = (currentPage === 1);
+                paginationContainer.appendChild(prevBtn);
+
+                // Page Indicator
+                const pageText = document.createElement('span');
+                pageText.className = 'text-gray-400 font-medium';
+                pageText.textContent = `Page ${currentPage} of ${pageCount}`;
+                paginationContainer.appendChild(pageText);
+
+                // Next or Finish Button
+                if (currentPage === pageCount) {
+                    const finishBtn = createButton('finish-btn', 'Finish Quiz', showScore, ['bg-green-600', 'hover:bg-green-500']);
+                    finishBtn.disabled = !allAnswered; 
+                    if (!allAnswered) finishBtn.title = "Answer all questions to finish";
+                    paginationContainer.appendChild(finishBtn);
+                } else {
+                    const nextBtn = createButton('next-btn', 'Next', () => changePage(currentPage + 1), ['bg-blue-600', 'hover:bg-blue-500']);
+                    paginationContainer.appendChild(nextBtn);
+                }
+             }
+
+            function createButton(id, text, onClick, classes = []) {
+                const btn = document.createElement('button');
+                btn.id = id;
+                btn.textContent = text;
+                btn.className = ['pagination-btn', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded-lg', 'transition-colors', 'duration-200', ...classes].join(' ');
+                btn.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
+                btn.onclick = onClick;
+                return btn;
+            }
+
+            function changePage(page) {
+                const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                if (page < 1 || page > pageCount || page === currentPage) return;
+                currentPage = page;
+                renderQuiz();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function checkMCQAnswer(globalQIndex, selectedIndex) {
+                 if (globalQIndex < 0 || globalQIndex >= allQuestions.length || !allQuestions[globalQIndex]) {
+                     console.error(`Invalid MCQ index: ${globalQIndex}`);
+                     return;
+                 }
+                const question = allQuestions[globalQIndex];
+                if (question.userAnswer !== undefined && question.userAnswer !== null) return;
+
+                question.userAnswer = selectedIndex;
+                totalAnsweredCount++;
+                updateProgressBar();
+                showMCQAnswerFeedback(globalQIndex, false); 
+
+                 totalQuestionCount = getTotalQuestions();
+                 const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                 if (currentPage === pageCount && totalAnsweredCount >= totalQuestionCount) {
+                     renderPagination();
+                 }
+            }
+
+            function checkEMQAnswer(baseIndex, subQIndex, selectedIndex) {
+                 if (baseIndex < 0 || baseIndex >= allQuestions.length || !allQuestions[baseIndex] ||
+                     !Array.isArray(allQuestions[baseIndex].questions) || subQIndex < 0 ||
+                     subQIndex >= allQuestions[baseIndex].questions.length || !allQuestions[baseIndex].questions[subQIndex]) {
+                     console.error(`Invalid EMQ index: base ${baseIndex}, sub ${subQIndex}`);
+                     return;
+                 }
+                const subQuestion = allQuestions[baseIndex].questions[subQIndex];
+                if (subQuestion.userAnswer !== undefined && subQuestion.userAnswer !== null) return;
+
+                subQuestion.userAnswer = selectedIndex;
+                totalAnsweredCount++;
+                updateProgressBar();
+                showEMQAnswerFeedback(baseIndex, subQIndex, false); 
+
+                totalQuestionCount = getTotalQuestions();
+                const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                if (currentPage === pageCount && totalAnsweredCount >= totalQuestionCount) {
+                    renderPagination();
+                }
+            }
+
+             function showMCQAnswerFeedback(globalQIndex, forceShowExplanation = false) {
+                 if (globalQIndex < 0 || globalQIndex >= allQuestions.length || !allQuestions[globalQIndex]) return;
+                 const question = allQuestions[globalQIndex];
+                 const qBlock = document.getElementById(`q-${globalQIndex}`);
+                 if (!qBlock) return;
+
+                 const optionButtons = qBlock.querySelectorAll('.option-btn');
+                 const feedbackContainer = document.getElementById(`mcq-feedback-${globalQIndex}`);
+                 const resultEl = document.getElementById(`mcq-result-${globalQIndex}`);
+                 const explanationContainer = document.getElementById(`mcq-explanation-container-${globalQIndex}`);
+                 const explanationEl = document.getElementById(`mcq-explanation-${globalQIndex}`);
+                 const showExplanationBtn = document.getElementById(`mcq-show-exp-btn-${globalQIndex}`);
+
+                 if (!feedbackContainer || !resultEl || !explanationContainer || !explanationEl || !showExplanationBtn || !optionButtons.length) {
+                     console.warn(`Missing feedback elements for MCQ ${globalQIndex + 1}`);
+                     return;
+                 }
+
+                 explanationEl.classList.remove('explanation-correct', 'explanation-incorrect', 'bg-green-900/20', 'bg-red-900/20');
+                 optionButtons.forEach(btn => {
+                     btn.disabled = true; 
+                     btn.classList.remove('hover:bg-gray-600', 'bg-green-600', 'bg-red-600', 'text-white', 'ring-2', 'ring-green-400', 'ring-red-400');
+                 });
+
+                 const isCorrect = question.answer !== undefined && question.userAnswer === question.answer;
+
+                 resultEl.textContent = isCorrect ? 'Correct!' : 'Incorrect';
+                 resultEl.className = `text-xl font-bold mb-3 ${isCorrect ? 'text-green-400' : 'text-red-400'}`;
+                 explanationEl.classList.add(isCorrect ? 'explanation-correct' : 'explanation-incorrect', isCorrect ? 'bg-green-900/20' : 'bg-red-900/20');
+
+                 if (question.userAnswer !== undefined && question.userAnswer !== null && optionButtons[question.userAnswer]) {
+                    optionButtons[question.userAnswer].classList.add(isCorrect ? 'bg-green-600' : 'bg-red-600', 'text-white', 'ring-2', isCorrect ? 'ring-green-400' : 'ring-red-400');
+                 }
+                 if (!isCorrect && question.answer !== undefined && optionButtons[question.answer]) {
+                    optionButtons[question.answer].classList.add('bg-green-600', 'text-white', 'ring-2', 'ring-green-400');
+                 }
+
+                 feedbackContainer.classList.remove('hidden');
+                 showExplanationBtn.classList.remove('hidden'); 
+
+                 if (forceShowExplanation || !explanationContainer.classList.contains('hidden')) {
+                     explanationContainer.classList.remove('hidden');
+                     showExplanationBtn.textContent = 'Hide Explanation';
+                 } else {
+                     explanationContainer.classList.add('hidden');
+                     showExplanationBtn.textContent = 'Show Explanation';
+                 }
+            }
+
+             function showEMQAnswerFeedback(baseIndex, subQIndex, forceShowExplanation = false) {
+                  if (baseIndex < 0 || baseIndex >= allQuestions.length || !allQuestions[baseIndex] ||
+                      !Array.isArray(allQuestions[baseIndex].questions) || subQIndex < 0 ||
+                      subQIndex >= allQuestions[baseIndex].questions.length || !allQuestions[baseIndex].questions[subQIndex]) return;
+                 const subQuestion = allQuestions[baseIndex].questions[subQIndex];
+
+                 const subQBlock = document.getElementById(`q-${baseIndex}-${subQIndex}`);
+                 if (!subQBlock) return;
+
+                 const optionButtons = subQBlock.querySelectorAll('.option-btn');
+                 const feedbackContainer = document.getElementById(`emq-feedback-${baseIndex}-${subQIndex}`);
+                 const resultEl = document.getElementById(`emq-result-${baseIndex}-${subQIndex}`);
+                 const explanationContainer = document.getElementById(`emq-explanation-container-${baseIndex}-${subQIndex}`);
+                 const explanationEl = document.getElementById(`emq-explanation-${baseIndex}-${subQIndex}`);
+                 const showExplanationBtn = document.getElementById(`emq-show-exp-btn-${baseIndex}-${subQIndex}`);
+
+                 if (!feedbackContainer || !resultEl || !explanationContainer || !explanationEl || !showExplanationBtn || !optionButtons.length) {
+                     console.warn(`Missing feedback elements for EMQ ${baseIndex + 1}.${subQIndex + 1}`);
+                     return;
+                 }
+
+                 explanationEl.classList.remove('explanation-correct', 'explanation-incorrect', 'bg-green-900/20', 'bg-red-900/20');
+                 optionButtons.forEach(btn => {
+                     btn.disabled = true; 
+                     btn.classList.remove('hover:bg-gray-500', 'bg-green-600', 'bg-red-600', 'text-white', 'ring-2', 'ring-green-400', 'ring-red-400');
+                 });
+
+                 const isCorrect = subQuestion.answer !== undefined && subQuestion.userAnswer === subQuestion.answer;
+
+                 resultEl.textContent = isCorrect ? 'Correct!' : 'Incorrect';
+                 resultEl.className = `text-xl font-bold mb-3 ${isCorrect ? 'text-green-400' : 'text-red-400'}`;
+                 explanationEl.classList.add(isCorrect ? 'explanation-correct' : 'explanation-incorrect', isCorrect ? 'bg-green-900/20' : 'bg-red-900/20');
+
+                 if (subQuestion.userAnswer !== undefined && subQuestion.userAnswer !== null && optionButtons[subQuestion.userAnswer]) {
+                     optionButtons[subQuestion.userAnswer].classList.add(isCorrect ? 'bg-green-600' : 'bg-red-600', 'text-white', 'ring-2', isCorrect ? 'ring-green-400' : 'ring-red-400');
+                 }
+                  if (!isCorrect && subQuestion.answer !== undefined && optionButtons[subQuestion.answer]) {
+                      optionButtons[subQuestion.answer].classList.add('bg-green-600', 'text-white', 'ring-2', 'ring-green-400');
+                  }
+
+                 feedbackContainer.classList.remove('hidden');
+                 showExplanationBtn.classList.remove('hidden'); 
+
+                 if (forceShowExplanation || !explanationContainer.classList.contains('hidden')) {
+                     explanationContainer.classList.remove('hidden');
+                     showExplanationBtn.textContent = 'Hide Explanation';
+                 } else {
+                     explanationContainer.classList.add('hidden');
+                     showExplanationBtn.textContent = 'Show Explanation';
+                 }
+            }
+
+            function showScore() {
+                 let finalScore = 0;
+                 totalQuestionCount = getTotalQuestions();
+                 allQuestions.forEach(q => {
+                      if (!q) return; 
+                     if (q.type === 'emq_set' && Array.isArray(q.questions)) {
+                         q.questions.forEach(subQ => {
+                             if (subQ && subQ.userAnswer === subQ.answer) finalScore++;
+                         });
+                     } else if (q.type === 'mcq' && q.userAnswer === q.answer) {
+                          finalScore++;
+                     }
+                 });
+                scoreText.textContent = totalQuestionCount > 0 ? `Your Score: ${finalScore} / ${totalQuestionCount}` : 'Quiz Error: No questions found';
+                scoreContainer.classList.remove('hidden');
+                quizContainer.classList.add('hidden');
+                paginationContainer.classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function reviewQuiz() {
+                scoreContainer.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                paginationContainer.classList.remove('hidden');
+                currentPage = 1; 
+                renderQuiz(); 
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function restartQuiz() {
+                totalAnsweredCount = 0;
+                currentPage = 1;
+                allQuestions.forEach(q => {
+                     if (!q) return; 
+                    if (q.type === 'emq_set' && Array.isArray(q.questions)) {
+                        q.questions.forEach(subQ => { if (subQ) subQ.userAnswer = undefined });
+                    } else { 
+                        q.userAnswer = undefined;
+                    }
+                });
+                scoreContainer.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                paginationContainer.classList.remove('hidden');
+                 totalQuestionCount = getTotalQuestions(); 
+                updateProgressBar(); 
+                renderQuiz(); 
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // --- Initialization ---
+            totalQuestionCount = getTotalQuestions();
+            console.log("Total scorable questions calculated:", totalQuestionCount);
+            
+            console.log("Starting new quiz session.");
+            totalAnsweredCount = 0;
+            currentPage = 1; 
+           
+            updateProgressBar(); 
+            renderQuiz(); 
+
+            if(restartBtn) restartBtn.addEventListener('click', restartQuiz);
+            if(reviewBtn) reviewBtn.addEventListener('click', reviewQuiz);
+
+            console.log("Peritoneal Sac Quiz initialized.");
+
+        }); // --- End of DOMContentLoaded ---
+
+    </script>
+</body>
+</html>
+

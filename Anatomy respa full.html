@@ -1,0 +1,1524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USMLE-Style Quiz: Comprehensive Respiratory Anatomy (Revised)</title> <!-- Updated Title -->
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Load Inter font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Load Heroicons for tooltips -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/heroicons/2.1.1/24/solid/css/heroicons.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #111827; } /* gray-900 */
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; } /* gray-700 */
+        ::-webkit-scrollbar-thumb:hover { background: #4B5563; } /* gray-600 */
+        /* Disabled buttons */
+        .option-btn:disabled { opacity: 0.8; cursor: not-allowed; }
+        .pagination-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        /* Explanation colors */
+        .explanation-correct { border-color: #34D399; } /* green-400 */
+        .explanation-incorrect { border-color: #F87171; } /* red-400 */
+        /* EMQ buttons */
+        .emq-option-btn { width: 2.5rem; height: 2.5rem; display: inline-flex; align-items: center; justify-content: center; padding: 0; margin-right: 0.5rem; margin-bottom: 0.5rem; }
+        /* Progress Bar */
+        #progress-bar-container { position: fixed; top: 0; left: 0; right: 0; height: 8px; background-color: #374151; z-index: 50; } /* gray-700 */
+        #progress-bar { height: 100%; background-color: #3B82F6; width: 0%; transition: width 0.3s ease-out; } /* blue-500 */
+        /* Difficulty Badges */
+        .badge { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+        .badge-easy { background-color: #10B981; color: #ffffff; } /* green-500 */
+        .badge-moderate { background-color: #F59E0B; color: #1F2937; } /* yellow-500, gray-800 */
+        .badge-hard { background-color: #EF4444; color: #ffffff; } /* red-500 */
+        /* Reference Tooltip */
+        .reference-tooltip { position: relative; display: inline-block; cursor: help; }
+        .reference-tooltip .tooltip-text { visibility: hidden; width: 220px; background-color: #1F2937; color: #fff; text-align: center; border-radius: 6px; padding: 8px; position: absolute; z-index: 10; bottom: 125%; left: 50%; margin-left: -110px; opacity: 0; transition: opacity 0.3s; border: 1px solid #4B5563; font-size: 0.875rem; font-weight: 400; } /* gray-800, gray-600 */
+        .reference-tooltip:hover .tooltip-text { visibility: visible; opacity: 1; }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-200 min-h-screen p-4 md:p-8 pt-10"> <!-- Adjusted pt to clear progress bar -->
+
+    <!-- Progress Bar -->
+    <div id="progress-bar-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div class="max-w-4xl mx-auto">
+
+        <!-- Header -->
+        <header class="text-center py-4 mb-6">
+            <h1 class="text-3xl md:text-4xl font-bold text-white mb-2">USMLE-Style Clinical Anatomy Quiz</h1>
+            <p class="text-lg text-gray-400">Comprehensive Respiratory System (Revised)</p> <!-- Updated Subtitle -->
+        </header>
+
+        <!-- Score Container (Initially Hidden) -->
+        <div id="score-container" class="hidden bg-gray-800 p-6 rounded-lg shadow-xl mb-6 text-center">
+            <h2 class="text-2xl font-bold text-white">Quiz Complete!</h2>
+            <p class="text-3xl font-bold text-blue-400 my-4" id="score-text"></p>
+            <div class="flex justify-center gap-4">
+                <button id="review-btn" class="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+                    Review Answers
+                </button>
+                <button id="restart-btn" class="bg-blue-600 hover:bg-blue-500 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-200">
+                    Restart Quiz
+                </button>
+            </div>
+        </div>
+
+        <!-- Quiz Container -->
+        <div id="quiz-container" class="space-y-6">
+            <!-- Questions will be dynamically inserted here -->
+        </div>
+
+        <!-- Pagination Container -->
+        <div id="pagination-container" class="flex justify-between items-center mt-8">
+            <!-- Pagination buttons will be dynamically inserted here -->
+        </div>
+
+    </div>
+
+    <script>
+        // Questions Array Covering All 10 Lectures (Revised based on Past Exam PDF)
+        let allQuestions = [
+            // =================================================================
+            // === NOSE & SINUSES (Focus on Past Exam Topics) ===
+            // =================================================================
+            { // High yield - Epistaxis
+                type: "mcq",
+                difficulty: "Easy",
+                vignette: "A young boy presents to the emergency department with persistent anterior nosebleed after minor trauma.",
+                question: "Bleeding from Kiesselbach's plexus on the nasal septum involves anastomoses of several arteries. Which artery contributes branches from the facial artery territory?",
+                options: [
+                    "Sphenopalatine artery",
+                    "Anterior ethmoidal artery",
+                    "Greater palatine artery",
+                    "Superior labial artery"
+                ],
+                answer: 3,
+                explanation: "Kiesselbach's plexus involves the sphenopalatine (from maxillary), anterior ethmoidal (from ophthalmic), greater palatine (from maxillary), and septal branch of the superior labial artery (from facial).",
+                reference: "Ref: Nose Lec 1 PDF, Pg 21-22; Tut I PDF, Pg 8-9; Past Exam Q21, 31",
+                userAnswer: undefined
+            },
+            { // High yield - Sinus Drainage
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A patient with chronic sinusitis undergoes functional endoscopic sinus surgery (FESS). The surgeon identifies and widens the opening of the maxillary sinus.",
+                question: "Into which specific meatus of the nasal cavity does the maxillary sinus normally drain?",
+                options: [
+                    "Inferior meatus",
+                    "Middle meatus",
+                    "Superior meatus",
+                    "Sphenoethmoidal recess"
+                ],
+                answer: 1,
+                explanation: "The maxillary sinus ostium opens into the hiatus semilunaris, located within the middle meatus. The frontal and anterior ethmoidal sinuses also drain into this region.",
+                reference: "Ref: Nose Lec 1 PDF, Pg 16, 19, 37; Tut I PDF, Pg 5-6; Past Exam Q25, 29, 33",
+                userAnswer: undefined
+            },
+            { // High yield - Maxillary Sinus Innervation
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A patient with severe maxillary sinusitis experiences pain referred to the upper teeth on the affected side.",
+                question: "This referred pain is mediated by branches of which nerve?",
+                options: [
+                    "Ophthalmic nerve (CN V1)",
+                    "Maxillary nerve (CN V2)",
+                    "Mandibular nerve (CN V3)",
+                    "Facial nerve (CN VII)"
+                ],
+                answer: 1,
+                explanation: "The maxillary nerve (CN V2) provides sensory innervation to the maxillary sinus lining and the maxillary teeth via its superior alveolar branches (anterior, middle, posterior). Inflammation can irritate these nerves, causing dental pain.",
+                reference: "Ref: Nose Lec 1 PDF, Pg 23-24, 30; Past Exam Q27",
+                userAnswer: undefined
+            },
+            { // High yield - Lymph Drainage
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A patient is diagnosed with squamous cell carcinoma of the nasal vestibule.",
+                question: "Metastasis from this location would most likely first involve which group of lymph nodes?",
+                options: [
+                    "Submandibular nodes",
+                    "Submental nodes",
+                    "Retropharyngeal nodes",
+                    "Parotid nodes"
+                ],
+                answer: 0,
+                explanation: "The anterior part of the nasal cavity, including the vestibule, primarily drains lymph to the submandibular nodes, following the course of facial vessels.",
+                reference: "Ref: Nose Lec 1 PDF, Pg 25; Past Exam Q26",
+                userAnswer: undefined
+            },
+            { // NEW - Posterior Epistaxis Source
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "An elderly patient with hypertension presents with a severe posterior nosebleed that is difficult to control with anterior packing.",
+                question: "Which artery is the most likely source of significant posterior epistaxis?",
+                options: [
+                    "Anterior ethmoidal artery",
+                    "Posterior ethmoidal artery",
+                    "Sphenopalatine artery",
+                    "Greater palatine artery"
+                ],
+                answer: 2,
+                explanation: "The sphenopalatine artery, a terminal branch of the maxillary artery, supplies the posterior and lateral nasal walls. It is the major source of severe posterior epistaxis, often associated with Woodruff's plexus.",
+                reference: "Ref: Nose Lec 1 PDF, Pg 21-22", // Indirectly related to Q21/31
+                userAnswer: undefined
+            },
+            // =================================================================
+            // === PHARYNX (Focus on Past Exam Topics) ===
+            // =================================================================
+            { // High yield - Adenoids/Tubal Tonsil
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A child with recurrent otitis media undergoes adenoidectomy. During the procedure, the surgeon visualizes the opening of the auditory (Eustachian) tube.",
+                question: "Which collection of lymphoid tissue is located immediately posterior to the opening of the auditory tube in the nasopharynx?",
+                options: [
+                    "Palatine tonsil",
+                    "Lingual tonsil",
+                    "Pharyngeal tonsil (adenoids)",
+                    "Tubal tonsil"
+                ],
+                answer: 3,
+                explanation: "The tubal tonsil surrounds the pharyngeal opening of the auditory tube. Hypertrophy, often associated with adenoid hypertrophy, can contribute to Eustachian tube dysfunction and otitis media.",
+                reference: "Ref: Pharynx Lec 2 PDF, Pg 15; Tut I PDF, Pg 21; Past Exam Q35, 41",
+                userAnswer: undefined
+            },
+            { // High yield - Piriform Fossa Sensation & Aspiration Risk
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "A patient aspirates thin liquids frequently after suffering a stroke affecting the vagus nerve.",
+                question: "Loss of sensation in the laryngeal vestibule and piriform fossae, increasing aspiration risk, results from damage to which nerve?",
+                options: [
+                    "Glossopharyngeal nerve (CN IX)",
+                    "External laryngeal nerve",
+                    "Recurrent laryngeal nerve",
+                    "Internal laryngeal nerve"
+                ],
+                answer: 3,
+                explanation: "The internal laryngeal nerve (branch of SLN from Vagus) provides sensation to the larynx above the vocal cords, including the piriform fossa and laryngeal inlet. Anesthesia of this region impairs the cough reflex and protective airway closure during swallowing.",
+                reference: "Ref: Pharynx Lec 2 PDF, Pg 18, 25; Larynx Lec 3 PDF, Pg 25; Past Exam Q1, 3, 16",
+                userAnswer: undefined
+            },
+            { // NEW - Tonsillectomy Bleeding Risk (Artery)
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "During a tonsillectomy, significant arterial bleeding occurs from the tonsillar bed.",
+                question: "Which branch of the facial artery is the primary arterial supply to the palatine tonsil and the most common source of bleeding in this procedure?",
+                options: [
+                    "Ascending pharyngeal artery",
+                    "Tonsillar artery",
+                    "Ascending palatine artery",
+                    "Dorsal lingual artery"
+                ],
+                answer: 1,
+                explanation: "The tonsillar artery, arising from the facial artery, is the main blood supply to the palatine tonsil. The external palatine vein is also nearby and can cause significant venous bleeding.",
+                reference: "Ref: Pharynx Lec 2 PDF, Pg 21", // Implicitly relevant to tonsils (Q35/41)
+                userAnswer: undefined
+            },
+            { // NEW - Nasopharynx Innervation (CN V2)
+                type: "mcq",
+                difficulty: "Moderate",
+                vignette: "A patient complains of numbness in the posterior part of their nasal cavity and the roof of their nasopharynx after sinus surgery.",
+                question: "General sensation from the nasopharynx is primarily carried by branches of which cranial nerve?",
+                options: [
+                    "Ophthalmic nerve (CN V1)",
+                    "Maxillary nerve (CN V2)",
+                    "Mandibular nerve (CN V3)",
+                    "Glossopharyngeal nerve (CN IX)"
+                ],
+                answer: 1,
+                explanation: "The nasopharynx receives sensory innervation mainly from the pharyngeal branch of the maxillary nerve (CN V2). The oropharynx is CN IX, laryngopharynx CN X.",
+                reference: "Ref: Pharynx Lec 2 PDF, Pg 25", // Linking V2 from sinuses
+                userAnswer: undefined
+            },
+            { // NEW - Tensor Veli Palatini Exception (CN V3)
+                type: "mcq",
+                difficulty: "Hard",
+                vignette: "Most muscles of the soft palate and pharynx are innervated by the vagus nerve (CN X) via the pharyngeal plexus.",
+                question: "Which muscle, responsible for tensing the soft palate and opening the auditory tube, is the exception, being innervated by the mandibular nerve (CN V3)?",
+                options: [
+                    "Levator veli palatini",
+                    "Tensor veli palatini",
+                    "Palatoglossus",
+                    "Palatopharyngeus"
+                ],
+                answer: 1,
+                explanation: "Tensor veli palatini is derived from the first pharyngeal arch and is therefore innervated by the nerve of that arch, the mandibular division of the trigeminal nerve (CN V3). All other palate muscles (except stylopharyngeus - CN IX) are CN X.",
+                reference: "Ref: Pharynx Lec 2 PDF, Pg 25 (Implied)", // High-yield exception often tested
+                userAnswer: undefined
+            },
+             // =================================================================
+             // === LARYNX (Focus on Past Exam Topics - Nerves/Muscles) ===
+             // =================================================================
+             { // VERY High Yield - RLN Injury
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A patient undergoes thyroid surgery. Post-operatively, they have a weak, breathy voice. Laryngoscopy reveals the right vocal cord is immobile in the paramedian position.",
+                 question: "Which nerve was most likely injured?",
+                 options: [
+                     "Right external laryngeal nerve",
+                     "Right internal laryngeal nerve",
+                     "Right recurrent laryngeal nerve",
+                     "Right phrenic nerve"
+                 ],
+                 answer: 2,
+                 explanation: "Unilateral injury to the recurrent laryngeal nerve paralyzes all intrinsic laryngeal muscles on that side except the cricothyroid, typically resulting in a paramedian vocal cord position and hoarseness/breathiness.",
+                 reference: "Ref: Larynx Lec 3 PDF, Pg 25, 29; Past Exam Q5, 6, 7, 11",
+                 userAnswer: undefined
+             },
+             { // VERY High Yield - PCA Action
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "During laryngoscopy, the physician asks the patient to take a deep breath.",
+                 question: "Which muscle contracts to abduct the vocal cords and widen the rima glottidis during deep inspiration?",
+                 options: [
+                     "Lateral cricoarytenoid",
+                     "Transverse arytenoid",
+                     "Posterior cricoarytenoid",
+                     "Thyroarytenoid (Vocalis)"
+                 ],
+                 answer: 2,
+                 explanation: "The posterior cricoarytenoid is the sole abductor of the vocal cords. Its action is essential for opening the airway during inspiration.",
+                 reference: "Ref: Larynx Lec 3 PDF, Pg 22-23; Past Exam Q2, 4, 14",
+                 userAnswer: undefined
+             },
+             { // VERY High Yield - External Laryngeal Nerve Injury
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A choir singer notices persistent difficulty reaching high notes and vocal fatigue after undergoing neck surgery unrelated to the thyroid.",
+                 question: "Injury to which nerve, potentially damaged during carotid endarterectomy or superior thyroid pole dissection, would explain these symptoms?",
+                 options: [
+                     "Internal laryngeal nerve",
+                     "External laryngeal nerve",
+                     "Recurrent laryngeal nerve",
+                     "Glossopharyngeal nerve"
+                 ],
+                 answer: 1,
+                 explanation: "The external branch of the superior laryngeal nerve innervates the cricothyroid muscle, the primary tensor of the vocal cords for high pitch. Injury leads to loss of the upper vocal range and vocal fatigue.",
+                 reference: "Ref: Larynx Lec 3 PDF, Pg 22-23, 25, 31, 35; Past Exam Q8, 10, 12, 13",
+                 userAnswer: undefined
+             },
+             { // NEW - Cricothyrotomy Landmark
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "In an emergency airway situation where intubation is impossible, a cricothyrotomy may be performed.",
+                 question: "Which palpable membrane, located between the thyroid cartilage superiorly and the cricoid cartilage inferiorly, is incised during this procedure?",
+                 options: [
+                     "Thyrohyoid membrane",
+                     "Quadrangular membrane",
+                     "Cricothyroid membrane (ligament)",
+                     "Cricotracheal membrane"
+                 ],
+                 answer: 2,
+                 explanation: "The cricothyroid membrane spans the gap between the inferior border of the thyroid cartilage and the superior border of the cricoid cartilage. It is relatively avascular and superficial, making it the site for emergency cricothyrotomy.",
+                 reference: "Ref: Larynx Lec 3 PDF, Pg 17", // Clinically relevant landmark
+                 userAnswer: undefined
+             },
+             { // High Yield Histology - True Cords
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "Histological examination of the larynx shows different epithelial linings in different regions.",
+                 question: "Which type of epithelium specifically covers the surface of the true vocal cords?",
+                 options: [
+                     "Pseudostratified ciliated columnar epithelium",
+                     "Simple cuboidal epithelium",
+                     "Stratified squamous non-keratinized epithelium",
+                     "Transitional epithelium"
+                 ],
+                 answer: 2,
+                 explanation: "The true vocal cords are subject to friction and vibration and are thus covered by protective stratified squamous non-keratinized epithelium.",
+                 reference: "Ref: Histo Lec 1 PDF, Pg 23; Past Exam Q95, 103, 106",
+                 userAnswer: undefined
+             },
+             // =================================================================
+             // === CHEST WALL & DIAPHRAGM (Focus on Past Exam Topics) ===
+             // =================================================================
+             { // High Yield - Thoracentesis Safety
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A clinician is preparing to perform thoracentesis to drain a pleural effusion identified on chest X-ray.",
+                 question: "To avoid injuring the intercostal neurovascular bundle, the needle should be inserted along which landmark relative to the ribs bounding the chosen intercostal space?",
+                 options: [
+                     "Inferior margin of the upper rib",
+                     "Midway between the ribs",
+                     "Superior margin of the lower rib",
+                     "Directly through the costal groove"
+                 ],
+                 answer: 2,
+                 explanation: "The intercostal VAN runs in the costal groove on the inferior aspect of the upper rib. Therefore, the safest place for insertion is just superior to the upper border of the lower rib.",
+                 reference: "Ref: Chest Wall Lec 4 PDF, Pg 10, 23; Past Exam Q Case p26",
+                 userAnswer: undefined
+             },
+             { // High Yield - Phrenic Nerve -> Diaphragm Paralysis
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A patient with bronchogenic carcinoma involving the mediastinum develops dyspnea. Fluoroscopy confirms paradoxical movement of the left hemidiaphragm during respiration.",
+                 question: "Paralysis resulting from tumor invasion of which nerve would cause this finding?",
+                 options: [
+                     "Left vagus nerve",
+                     "Left recurrent laryngeal nerve",
+                     "Left phrenic nerve",
+                     "Left sympathetic trunk"
+                 ],
+                 answer: 2,
+                 explanation: "The phrenic nerve provides sole motor innervation to the hemidiaphragm. Damage leads to paralysis, elevation, and paradoxical upward movement during inspiration.",
+                 reference: "Ref: Chest Wall Lec 4 PDF, Pg 36; Mediastinum Lec 7 PDF, Pg 8; Past Exam Q17, 46, 81",
+                 userAnswer: undefined
+             },
+             { // High Yield - Diaphragm Openings (T8)
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "Imaging studies demonstrate structures passing through the diaphragm.",
+                 question: "Which major vessel passes through the caval opening in the central tendon of the diaphragm, typically at the T8 vertebral level?",
+                 options: [
+                     "Aorta",
+                     "Esophagus",
+                     "Inferior Vena Cava",
+                     "Thoracic Duct"
+                 ],
+                 answer: 2,
+                 explanation: "The caval opening at T8 transmits the IVC and often terminal branches of the right phrenic nerve.",
+                 reference: "Ref: Chest Wall Lec 4 PDF, Pg 34; Past Exam Q18, 20",
+                 userAnswer: undefined
+             },
+             { // High Yield - Diaphragm Openings (T10)
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "A barium swallow study shows the passage of contrast through the diaphragm into the stomach.",
+                 question: "The esophagus, accompanied by the vagal trunks, passes through the diaphragm via the esophageal hiatus, typically at which vertebral level?",
+                 options: [
+                     "T8",
+                     "T10",
+                     "T12",
+                     "L1"
+                 ],
+                 answer: 1,
+                 explanation: "The esophageal hiatus, within the muscular part (right crus) of the diaphragm, is typically at the T10 level.",
+                 reference: "Ref: Chest Wall Lec 4 PDF, Pg 34; Past Exam Q19",
+                 userAnswer: undefined
+             },
+             { // NEW - Intercostal Muscle Actions
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "The intercostal muscles play roles in both inspiration and expiration.",
+                 question: "Which intercostal muscles are primarily active during quiet inspiration, elevating the ribs?",
+                 options: [
+                     "External intercostals",
+                     "Internal intercostals",
+                     "Innermost intercostals",
+                     "Transversus thoracis"
+                 ],
+                 answer: 0,
+                 explanation: "The external intercostals run downwards and forwards ('hands in pockets') and elevate the ribs during inspiration, increasing thoracic volume.",
+                 reference: "Ref: Chest Wall Lec 4 PDF, Pg 11, 38-39",
+                 userAnswer: undefined
+             },
+            // =================================================================
+            // === LUNGS & PLEURA (Focus on Past Exam Topics) ===
+            // =================================================================
+             { // High yield - Parietal Pleura Innervation/Pain
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A patient with pneumonia develops pleuritic chest pain localized to the lower lateral chest wall that worsens with deep breaths.",
+                 question: "This pain originates from inflammation of the parietal pleura and is transmitted by which nerves?",
+                 options: [
+                     "Phrenic nerve only",
+                     "Vagus nerve only",
+                     "Intercostal nerves",
+                     "Visceral afferent nerves"
+                 ],
+                 answer: 2,
+                 explanation: "The costal parietal pleura is innervated segmentally by the intercostal nerves, which transmit sharp, localized somatic pain.",
+                 reference: "Ref: Lungs Pleura I Lec 5 PDF, Pg 18, 27; Tut II PDF, Pg 19-20; Past Exam Q62",
+                 userAnswer: undefined
+             },
+             { // High yield - Recess for Fluid
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "A chest X-ray performed on an upright patient with a pleural effusion shows blunting of the sharp angle between the diaphragm and the lateral chest wall.",
+                 question: "This blunting indicates fluid accumulation in which pleural recess?",
+                 options: [
+                     "Costomediastinal recess",
+                     "Costodiaphragmatic recess",
+                     "Vertebromediastinal recess",
+                     "Cupula"
+                 ],
+                 answer: 1,
+                 explanation: "The costodiaphragmatic recess is the lowest point of the pleural cavity in the upright position, where pleural fluid preferentially collects.",
+                 reference: "Ref: Lungs Pleura I Lec 5 PDF, Pg 14-15, 17; Past Exam Q64",
+                 userAnswer: undefined
+             },
+             { // High Yield - Tension Pneumothorax
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "Following chest trauma, a patient develops severe respiratory distress, hypotension, jugular venous distension, and tracheal deviation to the left.",
+                 question: "What is the most likely diagnosis?",
+                 options: [
+                     "Massive hemothorax",
+                     "Cardiac tamponade",
+                     "Right-sided tension pneumothorax",
+                     "Flail chest"
+                 ],
+                 answer: 2,
+                 explanation: "These are classic signs of tension pneumothorax. Air enters the right pleural space and cannot escape, causing lung collapse and mediastinal shift to the contralateral (left) side, compressing the heart and great vessels.",
+                 reference: "Ref: Lungs Pleura I Lec 5 PDF, Pg 24; Tut II PDF, Pg 21, 23; Past Exam Q47",
+                 userAnswer: undefined
+             },
+             { // High Yield - Aspiration Site (Supine)
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "An unconscious patient lying flat on their back aspirates vomitus.",
+                 question: "Which bronchopulmonary segment is the most likely destination for the aspirated material?",
+                 options: [
+                     "Apical segment of right upper lobe",
+                     "Posterior segment of right upper lobe",
+                     "Superior segment of right lower lobe",
+                     "Medial basal segment of right lower lobe"
+                 ],
+                 answer: 2,
+                 explanation: "In the supine position, the orifice of the superior segment of the lower lobe (especially on the right) faces posteriorly and superiorly, making it the most dependent segment and the most common site for aspiration.",
+                 reference: "Ref: Lungs Pleura II Lec 6 PDF, Pg 15; Past Exam Q48, 50, 56, 61",
+                 userAnswer: undefined
+             },
+             { // High Yield - Right Middle Lobe Anatomy
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "A chest X-ray shows consolidation consistent with pneumonia, bounded superiorly by the horizontal fissure and inferiorly by the oblique fissure.",
+                 question: "Which lobe of the right lung is primarily involved?",
+                 options: [
+                     "Superior lobe",
+                     "Middle lobe",
+                     "Inferior lobe",
+                     "Lingula (left lung)"
+                 ],
+                 answer: 1,
+                 explanation: "The right middle lobe is located anteriorly and is demarcated by the horizontal fissure above (separating it from the superior lobe) and the oblique fissure below and behind (separating it from the inferior lobe).",
+                 reference: "Ref: Lungs Pleura II Lec 6 PDF, Pg 9; Past Exam Q60",
+                 userAnswer: undefined
+             },
+             // =================================================================
+             // === MEDIASTINUM (Focus on Past Exam Topics) ===
+             // =================================================================
+             { // High Yield - Superior Mediastinum Contents
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A CT scan reveals a mass in the superior mediastinum, anterior to the trachea and posterior to the manubrium.",
+                 question: "Which structure is typically found in this location in children and may persist as remnants in adults?",
+                 options: [
+                     "Thyroid gland",
+                     "Thymus gland",
+                     "Arch of the aorta",
+                     "Superior vena cava"
+                 ],
+                 answer: 1,
+                 explanation: "The thymus is located in the superior and anterior mediastinum, posterior to the manubrium and anterior to the great vessels. It is largest in childhood and usually atrophies in adults.",
+                 reference: "Ref: Mediastinum Lec 7 PDF, Pg 8, 11; Past Exam Q66, 87 (related)",
+                 userAnswer: undefined
+             },
+             { // High Yield - Posterior Mediastinum Contents
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "During an esophagectomy performed via thoracotomy, the surgeon identifies structures within the posterior mediastinum.",
+                 question: "Which of the following structures is NOT typically found in the posterior mediastinum?",
+                 options: [
+                     "Descending thoracic aorta",
+                     "Azygos vein",
+                     "Thoracic duct",
+                     "Phrenic nerves"
+                 ],
+                 answer: 3,
+                 explanation: "The posterior mediastinum contains the esophagus, descending aorta, azygos system veins, thoracic duct, vagus nerves, and sympathetic trunks. The phrenic nerves pass through the superior and middle mediastinum, anterior to the lung roots.",
+                 reference: "Ref: Mediastinum Lec 7 PDF, Pg 13; Past Exam Q67, 76, 80, 81",
+                 userAnswer: undefined
+             },
+             { // High Yield - Esophageal Compression
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A patient with long-standing, severe mitral valve stenosis develops dysphagia (difficulty swallowing).",
+                 question: "Enlargement of which cardiac chamber is the most likely cause of esophageal compression?",
+                 options: [
+                     "Right atrium",
+                     "Right ventricle",
+                     "Left atrium",
+                     "Left ventricle"
+                 ],
+                 answer: 2,
+                 explanation: "The left atrium lies immediately anterior to the esophagus. Significant left atrial enlargement (common in mitral stenosis) can compress the esophagus posteriorly, causing dysphagia.",
+                 reference: "Ref: Mediastinum Lec 7 PDF, Pg 16; Past Exam Q73, 75, 77, 88",
+                 userAnswer: undefined
+             },
+             { // High Yield - Middle Mediastinum Contents
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "A medical student is reviewing the contents of the mediastinal compartments.",
+                 question: "Which structure, along with the heart and roots of the great vessels, is a key component of the middle mediastinum?",
+                 options: [
+                     "Trachea",
+                     "Esophagus",
+                     "Pericardium",
+                     "Thymus"
+                 ],
+                 answer: 2,
+                 explanation: "The middle mediastinum is primarily defined by the pericardium and its contents: the heart, ascending aorta, pulmonary trunk, lower SVC, pulmonary veins, and phrenic nerves.",
+                 reference: "Ref: Mediastinum Lec 7 PDF, Pg 10, 12; Past Exam Q78",
+                 userAnswer: undefined
+             },
+             { // High Yield - Thoracic Duct Course/Drainage
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "The thoracic duct collects lymph from the majority of the body.",
+                 question: "After ascending through the posterior and superior mediastinum, where does the thoracic duct typically terminate?",
+                 options: [
+                     "Into the azygos vein",
+                     "Into the superior vena cava",
+                     "At the junction of the left internal jugular and left subclavian veins",
+                     "Into the right lymphatic duct"
+                 ],
+                 answer: 2,
+                 explanation: "The thoracic duct ascends, crosses to the left around T4-T6, and arches laterally in the root of the neck to drain into the venous system near the junction of the left internal jugular and left subclavian veins (the left venous angle).",
+                 reference: "Ref: Mediastinum Lec 7 PDF, Pg 27; Past Exam Q71",
+                 userAnswer: undefined
+             },
+            // =================================================================
+            // === RESPIRATORY HISTOLOGY (Focus on Past Exam Topics) ===
+            // =================================================================
+              { // High Yield - Type II Pneumocytes
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "Electron microscopy of alveolar tissue reveals cuboidal epithelial cells containing lamellar bodies.",
+                 question: "These cells are Type II pneumocytes, and their primary function is:",
+                 options: [
+                     "Gas exchange",
+                     "Phagocytosis",
+                     "Production of surfactant",
+                     "Formation of elastic fibers"
+                 ],
+                 answer: 2,
+                 explanation: "Type II pneumocytes synthesize and secrete pulmonary surfactant from lamellar bodies. Surfactant reduces surface tension in the alveoli.",
+                 reference: "Ref: Histo Lec 1 PDF, Pg 39; Past Exam Q91, 93, 107, 109",
+                 userAnswer: undefined
+             },
+             { // High Yield - Bronchi vs Bronchioles
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "A biopsy of lung tissue shows small airways.",
+                 question: "Which histological feature distinguishes a bronchiole from a bronchus?",
+                 options: [
+                     "Presence of smooth muscle",
+                     "Presence of respiratory epithelium",
+                     "Absence of cartilage in the wall",
+                     "Presence of elastic fibers"
+                 ],
+                 answer: 2,
+                 explanation: "Bronchioles lack cartilage plates and submucosal glands in their walls, which are present in bronchi.",
+                 reference: "Ref: Histo Lec 1 PDF, Pg 26, 30-31; Past Exam Q98, 101",
+                 userAnswer: undefined
+             },
+             { // High Yield - Respiratory Bronchiole Feature
+                 type: "mcq",
+                 difficulty: "Moderate",
+                 vignette: "Moving distally along the airway tree, the transition to the respiratory zone begins.",
+                 question: "What structural feature marks the transition from a terminal bronchiole to a respiratory bronchiole?",
+                 options: [
+                     "Loss of cilia",
+                     "Presence of Club (Clara) cells",
+                     "Appearance of alveoli budding from the wall",
+                     "Change from cuboidal to squamous epithelium"
+                 ],
+                 answer: 2,
+                 explanation: "Respiratory bronchioles are distinguished by having alveoli opening directly into their lumens, indicating the start of gas exchange capability.",
+                 reference: "Ref: Histo Lec 1 PDF, Pg 35; Past Exam Q94, 102",
+                 userAnswer: undefined
+             },
+              { // High Yield - True Vocal Cord Epithelium
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "The larynx contains different types of epithelial lining depending on the location and function.",
+                 question: "The true vocal cords are lined by:",
+                 options: [
+                     "Pseudostratified ciliated columnar epithelium",
+                     "Simple squamous epithelium",
+                     "Stratified squamous non-keratinized epithelium",
+                     "Simple cuboidal epithelium with Club cells"
+                 ],
+                 answer: 2,
+                 explanation: "Stratified squamous non-keratinized epithelium covers the true vocal cords to withstand the mechanical stress of phonation.",
+                 reference: "Ref: Histo Lec 1 PDF, Pg 23; Past Exam Q95, 103, 106",
+                 userAnswer: undefined
+             },
+             { // High Yield - Type I Pneumocyte Function
+                 type: "mcq",
+                 difficulty: "Easy",
+                 vignette: "Gas exchange occurs across the thin blood-air barrier in the alveoli.",
+                 question: "Which cell type forms the vast majority of the alveolar surface and is the primary cell involved in gas diffusion?",
+                 options: [
+                     "Type I pneumocyte",
+                     "Type II pneumocyte",
+                     "Alveolar macrophage",
+                     "Club (Clara) cell"
+                 ],
+                 answer: 0,
+                 explanation: "Type I pneumocytes are extremely thin squamous cells specialized for efficient gas exchange across their cytoplasm.",
+                 reference: "Ref: Histo Lec 1 PDF, Pg 37-38, 41; Past Exam Q110",
+                 userAnswer: undefined
+             },
+            // =================================================================
+            // === EMQ SET 1: Laryngeal Nerve Injuries (Kept - High Yield) ===
+            // =================================================================
+            {
+                type: "emq_set",
+                difficulty: "Hard",
+                vignette: "Match the clinical finding related to voice or breathing after neck surgery (Questions 51.1-51.4) with the most likely laryngeal nerve injury (Options A-D). Each option may be used once, more than once, or not at all.",
+                options: [
+                    "Unilateral Recurrent Laryngeal Nerve injury", // A
+                    "Bilateral Recurrent Laryngeal Nerve injury", // B
+                    "Unilateral Superior Laryngeal Nerve (External branch) injury", // C
+                    "Unilateral Superior Laryngeal Nerve (Internal branch) injury" // D
+                ],
+                questions: [
+                    {
+                        question: "Hoarseness; laryngoscopy shows the left vocal cord paralyzed in the paramedian position.",
+                        answer: 0, // A
+                        explanation: "Unilateral RLN injury paralyzes most ipsilateral intrinsic muscles (except cricothyroid), causing hoarseness and a paramedian cord position.",
+                        reference: "Ref: Larynx Lec 3 PDF, Pg 29; Past Exam Q5, 6, 7",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Acute respiratory distress and stridor; laryngoscopy shows both vocal cords near the midline, unable to abduct.",
+                        answer: 1, // B
+                        explanation: "Bilateral RLN injury paralyzes both posterior cricoarytenoids (sole abductors), leading to critical airway obstruction.",
+                        reference: "Ref: Larynx Lec 3 PDF, Pg 30; Past Exam Q7(D)",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Voice tires easily, patient cannot reach high pitches; speaking voice is near normal but lacks projection.",
+                        answer: 2, // C
+                        explanation: "The external branch of the SLN supplies the cricothyroid (tensor). Unilateral injury impairs pitch elevation and causes vocal fatigue.",
+                        reference: "Ref: Larynx Lec 3 PDF, Pg 31, 35; Past Exam Q12, 13",
+                        userAnswer: undefined
+                    },
+                     {
+                        question: "Patient reports frequent coughing and choking when swallowing liquids after surgery near the hyoid bone; voice is normal.",
+                        answer: 3, // D
+                        explanation: "The internal branch of the SLN provides sensation above the cords. Injury impairs the cough reflex and increases aspiration risk.",
+                        reference: "Ref: Larynx Lec 3 PDF, Pg 25; Past Exam Q1, 3, 16",
+                        userAnswer: undefined
+                    }
+                ]
+            },
+            // =================================================================
+            // === EMQ SET 2: Thoracentesis Layers (Kept - Clinically Relevant) ===
+            // =================================================================
+            {
+                type: "emq_set",
+                difficulty: "Moderate",
+                vignette: "During thoracentesis in the 9th intercostal space posteriorly, match the layer pierced (Questions 52.1-52.4) with its description (Options A-F). Each option may be used once, more than once, or not at all.",
+                options: [
+                    "Skin and superficial fascia", // A
+                    "External intercostal muscle", // B
+                    "Internal intercostal muscle", // C
+                    "Innermost intercostal muscle & Endothoracic fascia", // D
+                    "Parietal pleura", // E
+                    "Visceral pleura" // F
+                ],
+                questions: [
+                    {
+                        question: "Outermost intercostal muscle layer; fibers run downwards and forwards.",
+                        answer: 1, // B
+                        explanation: "External intercostal is the most superficial of the three intercostal muscle layers in the posterior and lateral chest wall.",
+                        reference: "Ref: Chest Wall Lec 4 PDF, Pg 11, 24",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Deepest intercostal muscle layer, deep to the intercostal neurovascular bundle.",
+                        answer: 3, // D
+                        explanation: "The innermost intercostal muscle lies deep to the VAN bundle and is separated from the parietal pleura by endothoracic fascia.",
+                        reference: "Ref: Chest Wall Lec 4 PDF, Pg 13, 15, 24",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Serous membrane lining the chest wall; must be punctured to enter the pleural cavity.",
+                        answer: 4, // E
+                        explanation: "The parietal pleura lines the thoracic cavity walls. Entering the pleural space requires piercing it.",
+                        reference: "Ref: Lungs Pleura I Lec 5 PDF, Pg 5, 24",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Serous membrane directly covering the lung; puncture should be avoided.",
+                        answer: 5, // F
+                        explanation: "The visceral pleura adheres to the lung surface. Puncturing it risks causing a pneumothorax.",
+                        reference: "Ref: Lungs Pleura I Lec 5 PDF, Pg 5, 24",
+                        userAnswer: undefined
+                    }
+                ]
+            },
+             // =================================================================
+             // === EMQ SET 3: Mediastinal Contents (Kept - High Yield) ===
+             // =================================================================
+            {
+                type: "emq_set",
+                difficulty: "Moderate",
+                vignette: "Match the major structure (Questions 53.1-53.4) with its primary mediastinal location (Options A-D). Each option may be used once, more than once, or not at all.",
+                options: [
+                    "Superior Mediastinum", // A
+                    "Posterior Mediastinum", // B
+                    "Middle Mediastinum", // C
+                    "Anterior Mediastinum" // D
+                ],
+                questions: [
+                    {
+                        question: "Trachea bifurcation and Arch of Azygos Vein.",
+                        answer: 0, // A (Boundary structures, Azygos arch enters SVC here)
+                        explanation: "The tracheal bifurcation occurs around the sternal angle (T4/T5), the boundary between superior and inferior mediastinum. The Azygos vein arches over the right lung root in the superior mediastinum to join the SVC.",
+                        reference: "Ref: Mediastinum Lec 7 PDF, Pg 8, 9, 17; Past Exam Q66, 87, 76",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Heart, Ascending Aorta, Pulmonary Trunk, Phrenic Nerves.",
+                        answer: 2, // C
+                        explanation: "The middle mediastinum contains the pericardium, heart, roots of great vessels, and phrenic nerves passing alongside.",
+                        reference: "Ref: Mediastinum Lec 7 PDF, Pg 10, 12; Past Exam Q78",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Esophagus, Descending Aorta, Thoracic Duct, Vagus Nerves.",
+                        answer: 1, // B
+                        explanation: "These structures traverse the posterior mediastinum, located behind the pericardium.",
+                        reference: "Ref: Mediastinum Lec 7 PDF, Pg 13; Past Exam Q67, 76, 80",
+                        userAnswer: undefined
+                    },
+                    {
+                        question: "Thymus remnants (adult), Sternopericardial ligaments.",
+                        answer: 3, // D
+                        explanation: "The anterior mediastinum is the space anterior to the pericardium, containing mainly fat, lymph nodes, and thymic remnants.",
+                        reference: "Ref: Mediastinum Lec 7 PDF, Pg 11",
+                        userAnswer: undefined
+                    }
+                ]
+            },
+            // =================================================================
+            // === EMQ SET 4: Respiratory Histology Cell Types (Revised - High Yield Cells) ===
+            // =================================================================
+             {
+                 type: "emq_set",
+                 difficulty: "Moderate",
+                 vignette: "Match the cell type (Questions 54.1-54.4) with its primary function or characteristic location in the respiratory system (Options A-F). Each option may be used once, more than once, or not at all.",
+                 options: [
+                     "Produces mucus in trachea and bronchi", // A
+                     "Forms ~95% of alveolar surface for gas exchange", // B
+                     "Produces surfactant in alveoli; progenitor cell", // C
+                     "Secretory, detoxifying cell in bronchioles", // D
+                     "Phagocytic 'dust cell' in alveoli", // E
+                     "Ciliated cell responsible for mucociliary clearance" // F
+                 ],
+                 questions: [
+                     {
+                         question: "Goblet cell",
+                         answer: 0, // A
+                         explanation: "Goblet cells are unicellular glands abundant in the trachea and bronchi, producing mucus for the mucociliary escalator.",
+                         reference: "Ref: Histo Lec 1 PDF, Pg 10; Past Exam Q89",
+                         userAnswer: undefined
+                     },
+                     {
+                         question: "Type I pneumocyte",
+                         answer: 1, // B
+                         explanation: "Type I pneumocytes are extremely thin squamous cells forming the majority of the alveolar lining, specialized for gas diffusion.",
+                         reference: "Ref: Histo Lec 1 PDF, Pg 37-38; Past Exam Q110",
+                         userAnswer: undefined
+                     },
+                     {
+                         question: "Type II pneumocyte",
+                         answer: 2, // C
+                         explanation: "Type II pneumocytes are cuboidal cells that produce surfactant and can differentiate into Type I cells after injury.",
+                         reference: "Ref: Histo Lec 1 PDF, Pg 39; Past Exam Q91, 93, 107, 109",
+                         userAnswer: undefined
+                     },
+                     {
+                         question: "Club (Clara) cell",
+                         answer: 3, // D
+                         explanation: "Club cells are non-ciliated, dome-shaped cells found in bronchioles that secrete protective substances, detoxify compounds, and act as progenitors.",
+                         reference: "Ref: Histo Lec 1 PDF, Pg 32; Past Exam Q96, 100, 108",
+                         userAnswer: undefined
+                     }
+                 ]
+             },
+            // =================================================================
+            // === EMQ SET 5: Diaphragmatic Openings & Levels (Kept - High Yield) ===
+            // =================================================================
+             {
+                 type: "emq_set",
+                 difficulty: "Easy",
+                 vignette: "Match the major structure passing through or behind the diaphragm (Questions 55.1-55.4) with the vertebral level at which it typically traverses the diaphragm (Options A-D). Each option may be used once, more than once, or not at all.",
+                 options: [
+                     "T8", // A
+                     "T10", // B
+                     "T12", // C
+                     "L1" // D
+                 ],
+                 questions: [
+                     {
+                         question: "Inferior Vena Cava",
+                         answer: 0, // A
+                         explanation: "The caval opening for the IVC is in the central tendon at T8.",
+                         reference: "Ref: Chest Wall Lec 4 PDF, Pg 34; Past Exam Q18, 20",
+                         userAnswer: undefined
+                     },
+                     {
+                         question: "Esophagus & Vagal Trunks",
+                         answer: 1, // B
+                         explanation: "The esophageal hiatus is in the muscular part (right crus) at T10.",
+                         reference: "Ref: Chest Wall Lec 4 PDF, Pg 34; Past Exam Q19",
+                         userAnswer: undefined
+                     },
+                     {
+                         question: "Aorta, Thoracic Duct, Azygos Vein",
+                         answer: 2, // C
+                         explanation: "The aortic hiatus is posterior to the diaphragm at T12.",
+                         reference: "Ref: Chest Wall Lec 4 PDF, Pg 34",
+                         userAnswer: undefined
+                     },
+                      {
+                         question: "Greater Splanchnic Nerve (piercing crus)", // Changed to different structure
+                         answer: 2, // C (Typically pierces crus near T12 level, separate from aortic hiatus)
+                         explanation: "Splanchnic nerves often pierce the diaphragmatic crura independently around the T12 level on their way to the abdomen.",
+                         reference: "Ref: Chest Wall Lec 4 PDF, Pg 34 (Implied)", // High-yield autonomic nerve relation
+                         userAnswer: undefined
+                     }
+                 ]
+             }
+            // =================================================================
+            // === END OF ALL QUESTIONS ===
+            // =================================================================
+        ];
+
+        let totalAnsweredCount = 0;
+        let currentPage = 1;
+        const questionsPerPage = 10;
+        let totalQuestionCount = 0; // Will be calculated
+        // REMOVED: let localStorageKey = ''; 
+
+        // --- DEFER ALL DOM OPERATIONS UNTIL THE DOCUMENT IS LOADED ---
+        document.addEventListener('DOMContentLoaded', () => {
+
+            // REMOVED: localStorageKey definition
+
+            const quizContainer = document.getElementById('quiz-container');
+            const paginationContainer = document.getElementById('pagination-container');
+            const scoreContainer = document.getElementById('score-container');
+            const scoreText = document.getElementById('score-text');
+            const restartBtn = document.getElementById('restart-btn');
+            const reviewBtn = document.getElementById('review-btn');
+            const progressBar = document.getElementById('progress-bar');
+
+            if (!quizContainer || !paginationContainer || !scoreContainer || !scoreText || !restartBtn || !reviewBtn || !progressBar) {
+                console.error("Error: Critical DOM elements missing.");
+                return;
+            }
+
+            // --- REMOVED: localStorage Functions (saveProgress, loadProgress) ---
+           
+
+            // --- Helper Functions ---
+            function getTotalQuestions() {
+                // Calculate total *scorable* questions (count sub-questions in EMQs)
+                return allQuestions.reduce((total, q) => {
+                     // Check if q exists and has a type
+                     if (!q || !q.type) return total;
+                     // Add length of questions array if it exists, otherwise 0
+                     return total + (q.type === 'emq_set' ? (q.questions || []).length : 1);
+                 }, 0);
+            }
+
+
+            function updateProgressBar() {
+                 totalQuestionCount = getTotalQuestions(); // Recalculate just in case
+                if (totalQuestionCount === 0) return;
+                 // Ensure totalAnsweredCount doesn't exceed totalQuestionCount
+                 const currentAnswered = Math.min(totalAnsweredCount, totalQuestionCount);
+                const percentage = (currentAnswered / totalQuestionCount) * 100;
+                progressBar.style.width = `${percentage}%`;
+                // console.log(`Progress bar: ${currentAnswered}/${totalQuestionCount} = ${percentage}%`);
+            }
+
+
+            // --- Rendering Functions ---
+            function renderQuiz() {
+                quizContainer.innerHTML = '';
+                 totalQuestionCount = getTotalQuestions(); // Ensure count is up-to-date
+                 const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                 // Ensure currentPage is valid
+                 if (currentPage < 1) currentPage = 1;
+                 // Prevent currentPage from exceeding pageCount
+                 if (currentPage > pageCount && pageCount > 0) currentPage = pageCount;
+
+
+                const startIndex = (currentPage - 1) * questionsPerPage;
+                // Use Math.min to prevent endIndex from exceeding array length
+                const endIndex = Math.min(startIndex + questionsPerPage, allQuestions.length);
+
+
+                console.log(`Rendering page ${currentPage}/${pageCount}, indices ${startIndex}-${endIndex-1}`);
+
+                // Check if allQuestions is actually an array before slicing
+                if (!Array.isArray(allQuestions)) {
+                    console.error("allQuestions is not an array!");
+                    return; // Stop rendering if data is invalid
+                }
+
+
+                allQuestions.slice(startIndex, endIndex).forEach((q, pageQIndex) => {
+                     // Check if question object exists
+                     if (!q) {
+                         console.error(`Missing question data at index ${startIndex + pageQIndex}`);
+                         return; // Skip this iteration
+                     }
+                    const globalQIndex = startIndex + pageQIndex;
+                    const qBlock = document.createElement('div');
+                    qBlock.id = `q-${globalQIndex}`;
+                     // Check question type before assigning background
+                    const baseBg = (q.type === 'emq_set') ? 'bg-gray-700' : 'bg-gray-800';
+                    qBlock.className = `${baseBg} rounded-lg shadow-xl p-6 transition-all duration-300`;
+
+                    // Check type again before calling render functions
+                    if (q.type === 'emq_set') {
+                        renderEMQBlock(q, globalQIndex, qBlock);
+                    } else if (q.type === 'mcq') { // Explicitly check for mcq
+                        renderMCQBlock(q, globalQIndex, qBlock);
+                    } else {
+                        console.warn(`Unknown question type "${q.type}" at index ${globalQIndex}`);
+                        // Optionally render a placeholder or error message
+                        qBlock.textContent = `Error: Unknown question type at index ${globalQIndex}.`;
+                    }
+                    quizContainer.appendChild(qBlock);
+                });
+                renderPagination();
+                updateProgressBar(); // Update progress bar after rendering
+            }
+
+
+            function createDifficultyBadge(difficulty) {
+                const badge = document.createElement('span');
+                let badgeClass = 'badge-easy'; // Default to easy
+                if (difficulty === 'Moderate') badgeClass = 'badge-moderate';
+                if (difficulty === 'Hard') badgeClass = 'badge-hard';
+                badge.className = `badge ${badgeClass} mb-4`;
+                badge.textContent = difficulty || 'Moderate'; // Default display text
+                return badge;
+            }
+
+            function createReference(refText) {
+                if (!refText) return document.createDocumentFragment(); // Return empty if no ref
+                const refContainer = document.createElement('div');
+                refContainer.className = 'reference-tooltip mt-3';
+                const refLink = document.createElement('span');
+                refLink.className = 'text-blue-400 text-sm font-medium cursor-help inline-flex items-center gap-1';
+                refLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M18 10a8 8 0 1 1-16 0 8 8 0 0 1 16 0Zm-7-4a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM9 9a.75.75 0 0 0 0 1.5h.253a.25.25 0 0 1 .244.304l-.459 2.066A1.75 1.75 0 0 0 10.747 15H11a.75.75 0 0 0 0-1.5h-.253a.25.25 0 0 1-.244-.304l.459-2.066A1.75 1.75 0 0 0 9.253 9H9Z" clip-rule="evenodd" /></svg>Ref`;
+                const tooltipText = document.createElement('span');
+                tooltipText.className = 'tooltip-text';
+                tooltipText.textContent = refText;
+                refContainer.appendChild(refLink);
+                refContainer.appendChild(tooltipText);
+                return refContainer;
+            }
+
+             function renderMCQBlock(questionData, globalQIndex, qBlock) {
+                 // Basic validation
+                 if (!questionData || !Array.isArray(questionData.options)) { // Check options is array
+                     console.error(`Invalid MCQ data at index ${globalQIndex}`);
+                     qBlock.textContent = 'Error loading question.';
+                     return;
+                 }
+
+
+                 qBlock.appendChild(createDifficultyBadge(questionData.difficulty));
+                 const vignetteEl = document.createElement('p');
+                 vignetteEl.className = 'text-gray-300 mb-4 text-base';
+                 vignetteEl.textContent = questionData.vignette || '';
+                 const questionEl = document.createElement('p');
+                 questionEl.className = 'text-lg font-semibold text-white mb-6';
+                 questionEl.textContent = `Q ${globalQIndex + 1}. ${questionData.question || 'Missing question text'}`;
+                 qBlock.appendChild(vignetteEl);
+                 qBlock.appendChild(questionEl);
+                 const optionsContainer = document.createElement('div');
+                 optionsContainer.className = 'space-y-3';
+
+                 questionData.options.forEach((option, oIndex) => {
+                     const optionBtn = document.createElement('button');
+                     optionBtn.className = 'option-btn w-full text-left p-4 bg-gray-700 hover:bg-gray-600 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500';
+                     optionBtn.textContent = `${String.fromCharCode(65 + oIndex)}. ${option}`;
+                     optionBtn.onclick = () => checkMCQAnswer(globalQIndex, oIndex);
+                     // Check userAnswer validity before disabling
+                     if (questionData.userAnswer !== undefined && questionData.userAnswer !== null) {
+                         optionBtn.disabled = true;
+                         optionBtn.classList.remove('hover:bg-gray-600');
+                     }
+                     optionsContainer.appendChild(optionBtn);
+                 });
+
+                 qBlock.appendChild(optionsContainer);
+                 createAndAppendFeedbackElements(qBlock, globalQIndex, 'mcq', questionData);
+
+                 // Check userAnswer validity before showing feedback
+                 if (questionData.userAnswer !== undefined && questionData.userAnswer !== null) {
+                    showMCQAnswerFeedback(globalQIndex, true); // True to force explanation open in review/reload
+                 }
+            }
+
+
+             function renderEMQBlock(emqSet, baseIndex, qBlock) {
+                  // Basic validation
+                 if (!emqSet || !Array.isArray(emqSet.options) || !Array.isArray(emqSet.questions)) {
+                     console.error(`Invalid EMQ data at index ${baseIndex}`);
+                     qBlock.textContent = 'Error loading question set.';
+                     return;
+                 }
+
+                 qBlock.appendChild(createDifficultyBadge(emqSet.difficulty));
+                 const vignetteEl = document.createElement('p');
+                 vignetteEl.className = 'text-gray-300 mb-4 text-base';
+                 vignetteEl.textContent = emqSet.vignette || '';
+                 const optionsTitle = document.createElement('h3');
+                 optionsTitle.className = 'text-lg font-semibold text-white mb-3';
+                 optionsTitle.textContent = `Question Set ${baseIndex + 1}: Option List`;
+                 const optionsList = document.createElement('ul');
+                 optionsList.className = 'list-none pl-5 mb-6 space-y-2';
+
+                 emqSet.options.forEach((option, oIndex) => {
+                     const li = document.createElement('li'); li.className = 'text-gray-300';
+                     li.textContent = `${String.fromCharCode(65 + oIndex)}. ${option}`; optionsList.appendChild(li);
+                 });
+                 qBlock.appendChild(vignetteEl); qBlock.appendChild(optionsTitle); qBlock.appendChild(optionsList);
+                 const subQuestionsContainer = document.createElement('div');
+                 subQuestionsContainer.className = 'space-y-6 border-t border-gray-600 pt-6';
+
+                 emqSet.questions.forEach((subQ, subQIndex) => {
+                     // Basic validation for sub-question
+                     if (!subQ) {
+                         console.error(`Invalid sub-question data at index ${baseIndex}-${subQIndex}`);
+                         return; // Skip rendering this sub-question
+                     }
+                     const subQBlock = document.createElement('div');
+                     subQBlock.id = `q-${baseIndex}-${subQIndex}`;
+                     subQBlock.className = 'border-l-4 border-gray-500 pl-4';
+                     const questionEl = document.createElement('p');
+                     questionEl.className = 'text-md font-semibold text-white mb-4';
+                     questionEl.textContent = `Question ${baseIndex + 1}.${subQIndex + 1}: ${subQ.question || 'Missing question text'}`;
+                     subQBlock.appendChild(questionEl);
+                     const optionsContainer = document.createElement('div'); optionsContainer.className = 'flex flex-wrap';
+
+                     emqSet.options.forEach((option, oIndex) => { // Iterate over parent options
+                         const optionBtn = document.createElement('button');
+                         optionBtn.className = 'option-btn emq-option-btn bg-gray-600 hover:bg-gray-500 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500';
+                         optionBtn.textContent = String.fromCharCode(65 + oIndex);
+                         optionBtn.onclick = () => checkEMQAnswer(baseIndex, subQIndex, oIndex);
+                          // Check userAnswer validity before disabling
+                         if (subQ.userAnswer !== undefined && subQ.userAnswer !== null) {
+                             optionBtn.disabled = true;
+                             optionBtn.classList.remove('hover:bg-gray-500');
+                         }
+                         optionsContainer.appendChild(optionBtn);
+                     });
+                     subQBlock.appendChild(optionsContainer);
+                     createAndAppendFeedbackElements(subQBlock, `${baseIndex}-${subQIndex}`, 'emq', subQ);
+                     subQuestionsContainer.appendChild(subQBlock);
+
+                     // Check userAnswer validity before showing feedback
+                     if (subQ.userAnswer !== undefined && subQ.userAnswer !== null) {
+                        showEMQAnswerFeedback(baseIndex, subQIndex, true); // True to force explanation open
+                     }
+                 });
+                 qBlock.appendChild(subQuestionsContainer);
+            }
+
+
+            // Helper to create feedback elements, now handles potential missing explanation
+            function createAndAppendFeedbackElements(parentBlock, indexSuffix, typePrefix, questionData) {
+                // Ensure questionData exists
+                 if (!questionData) return;
+
+                const feedbackContainer = document.createElement('div');
+                feedbackContainer.id = `${typePrefix}-feedback-${indexSuffix}`;
+                feedbackContainer.className = 'mt-4 hidden';
+
+                const resultEl = document.createElement('h3');
+                resultEl.id = `${typePrefix}-result-${indexSuffix}`;
+                resultEl.className = 'text-xl font-bold mb-3';
+                feedbackContainer.appendChild(resultEl);
+
+                const showExplanationBtn = document.createElement('button');
+                showExplanationBtn.id = `${typePrefix}-show-exp-btn-${indexSuffix}`;
+                showExplanationBtn.className = 'text-blue-400 hover:text-blue-300 font-medium text-sm hidden'; // Start hidden
+                showExplanationBtn.textContent = 'Show Explanation';
+
+                const explanationContainer = document.createElement('div');
+                explanationContainer.id = `${typePrefix}-explanation-container-${indexSuffix}`;
+                explanationContainer.className = 'mt-4 hidden'; // Start hidden
+
+                const explanationEl = document.createElement('p');
+                explanationEl.id = `${typePrefix}-explanation-${indexSuffix}`;
+                 // Check parentBlock exists before checking classList
+                const parentBg = parentBlock && parentBlock.classList.contains('bg-gray-700') ? 'bg-gray-800/50' : 'bg-gray-700/50';
+                explanationEl.className = `${parentBg} border-l-4 p-4 rounded-r-md text-gray-300 transition-colors`;
+                explanationEl.textContent = questionData.explanation || 'No explanation provided.'; // Default text
+                explanationContainer.appendChild(explanationEl);
+
+                if (questionData.reference) explanationContainer.appendChild(createReference(questionData.reference));
+                if (questionData.highYieldTip) {
+                    const tipEl = document.createElement('div');
+                    tipEl.className = 'mt-4 p-3 bg-blue-900/50 border-l-4 border-blue-400 rounded-r-md text-blue-100 text-sm';
+                    tipEl.textContent = questionData.highYieldTip;
+                    explanationContainer.appendChild(tipEl);
+                }
+
+                showExplanationBtn.onclick = () => {
+                    const isHidden = explanationContainer.classList.toggle('hidden');
+                    showExplanationBtn.textContent = isHidden ? 'Show Explanation' : 'Hide Explanation';
+                };
+
+                parentBlock.appendChild(feedbackContainer);
+                parentBlock.appendChild(showExplanationBtn); // Add the button itself
+                parentBlock.appendChild(explanationContainer);
+            }
+
+             function renderPagination() {
+                paginationContainer.innerHTML = '';
+                paginationContainer.className = 'flex justify-between items-center mt-8';
+                 totalQuestionCount = getTotalQuestions(); // Ensure count is accurate
+                const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                // Correct calculation for allAnswered
+                const allAnswered = totalAnsweredCount >= totalQuestionCount;
+
+
+                // console.log(`Rendering pagination. Page ${currentPage}/${pageCount}. All answered: ${allAnswered} (${totalAnsweredCount}/${totalQuestionCount})`);
+
+
+                if (pageCount <= 0) return; // No questions
+
+                // Previous Button
+                const prevBtn = createButton('prev-btn', 'Previous', () => changePage(currentPage - 1), ['bg-blue-600', 'hover:bg-blue-500']);
+                prevBtn.disabled = (currentPage === 1);
+                paginationContainer.appendChild(prevBtn);
+
+
+                // Page Indicator
+                const pageText = document.createElement('span');
+                pageText.className = 'text-gray-400 font-medium';
+                pageText.textContent = `Page ${currentPage} of ${pageCount}`;
+                paginationContainer.appendChild(pageText);
+
+                // Next or Finish Button
+                if (currentPage === pageCount) {
+                    const finishBtn = createButton('finish-btn', 'Finish Quiz', showScore, ['bg-green-600', 'hover:bg-green-500']);
+                    finishBtn.disabled = !allAnswered; // Disable if not all questions answered
+                    if (!allAnswered) finishBtn.title = "Answer all questions to finish";
+                    paginationContainer.appendChild(finishBtn);
+                } else {
+                    const nextBtn = createButton('next-btn', 'Next', () => changePage(currentPage + 1), ['bg-blue-600', 'hover:bg-blue-500']);
+                    paginationContainer.appendChild(nextBtn);
+                }
+             }
+
+
+            // Helper to create pagination buttons
+            function createButton(id, text, onClick, classes = []) {
+                const btn = document.createElement('button');
+                btn.id = id;
+                btn.textContent = text;
+                btn.className = ['pagination-btn', 'text-white', 'font-bold', 'py-2', 'px-4', 'rounded-lg', 'transition-colors', 'duration-200', ...classes].join(' ');
+                // Add disabled styling directly
+                btn.classList.add('disabled:opacity-50', 'disabled:cursor-not-allowed');
+                btn.onclick = onClick;
+                return btn;
+            }
+
+
+            // --- Event Handling & Logic ---
+            function changePage(page) {
+                const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                // Basic bounds check
+                if (page < 1 || page > pageCount || page === currentPage) return;
+
+                currentPage = page;
+                 console.log("Changing to page:", currentPage);
+                // REMOVED: saveProgress(); 
+                renderQuiz();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+
+            function checkMCQAnswer(globalQIndex, selectedIndex) {
+                 // Ensure question exists and is within bounds
+                 if (globalQIndex < 0 || globalQIndex >= allQuestions.length || !allQuestions[globalQIndex]) {
+                     console.error(`Invalid MCQ index: ${globalQIndex}`);
+                     return;
+                 }
+                const question = allQuestions[globalQIndex];
+                // Check if already answered
+                if (question.userAnswer !== undefined && question.userAnswer !== null) return;
+
+
+                console.log(`Answered MCQ ${globalQIndex + 1}`);
+                question.userAnswer = selectedIndex;
+                totalAnsweredCount++;
+                updateProgressBar();
+                showMCQAnswerFeedback(globalQIndex, false); // Show feedback, don't force explanation
+
+                 // Check if on last page and re-render pagination to enable Finish button if needed
+                 totalQuestionCount = getTotalQuestions(); // Ensure count is fresh
+                 const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                 if (currentPage === pageCount && totalAnsweredCount >= totalQuestionCount) {
+                     renderPagination();
+                 }
+                // REMOVED: saveProgress();
+            }
+
+
+            function checkEMQAnswer(baseIndex, subQIndex, selectedIndex) {
+                 // Ensure EMQ set and sub-question exist and indices are valid
+                 if (baseIndex < 0 || baseIndex >= allQuestions.length || !allQuestions[baseIndex] ||
+                     !Array.isArray(allQuestions[baseIndex].questions) || subQIndex < 0 ||
+                     subQIndex >= allQuestions[baseIndex].questions.length || !allQuestions[baseIndex].questions[subQIndex]) {
+                     console.error(`Invalid EMQ index: base ${baseIndex}, sub ${subQIndex}`);
+                     return;
+                 }
+                const subQuestion = allQuestions[baseIndex].questions[subQIndex];
+                // Check if already answered
+                if (subQuestion.userAnswer !== undefined && subQuestion.userAnswer !== null) return;
+
+
+                console.log(`Answered EMQ ${baseIndex + 1}.${subQIndex + 1}`);
+                subQuestion.userAnswer = selectedIndex;
+                totalAnsweredCount++;
+                updateProgressBar();
+                showEMQAnswerFeedback(baseIndex, subQIndex, false); // Show feedback, don't force explanation
+
+                // Check if on last page and re-render pagination to enable Finish button if needed
+                totalQuestionCount = getTotalQuestions(); // Ensure count is fresh
+                const pageCount = Math.ceil(allQuestions.length / questionsPerPage);
+                if (currentPage === pageCount && totalAnsweredCount >= totalQuestionCount) {
+                    renderPagination();
+                }
+                // REMOVED: saveProgress();
+            }
+
+
+
+             function showMCQAnswerFeedback(globalQIndex, forceShowExplanation = false) {
+                 // Ensure question exists
+                 if (globalQIndex < 0 || globalQIndex >= allQuestions.length || !allQuestions[globalQIndex]) return;
+                 const question = allQuestions[globalQIndex];
+                 const qBlock = document.getElementById(`q-${globalQIndex}`);
+                 if (!qBlock) return;
+
+
+                 const optionButtons = qBlock.querySelectorAll('.option-btn');
+                 const feedbackContainer = document.getElementById(`mcq-feedback-${globalQIndex}`);
+                 const resultEl = document.getElementById(`mcq-result-${globalQIndex}`);
+                 const explanationContainer = document.getElementById(`mcq-explanation-container-${globalQIndex}`);
+                 const explanationEl = document.getElementById(`mcq-explanation-${globalQIndex}`);
+                 const showExplanationBtn = document.getElementById(`mcq-show-exp-btn-${globalQIndex}`);
+
+                 // Check existence of elements before manipulating
+                 if (!feedbackContainer || !resultEl || !explanationContainer || !explanationEl || !showExplanationBtn || !optionButtons.length) {
+                     console.warn(`Missing feedback elements for MCQ ${globalQIndex + 1}`);
+                     return;
+                 }
+
+
+                 // Reset styles
+                 explanationEl.classList.remove('explanation-correct', 'explanation-incorrect', 'bg-green-900/20', 'bg-red-900/20');
+                 optionButtons.forEach(btn => {
+                     btn.disabled = true; // Always disable after answering
+                     btn.classList.remove('hover:bg-gray-600', 'bg-green-600', 'bg-red-600', 'text-white', 'ring-2', 'ring-green-400', 'ring-red-400');
+                 });
+
+                 // Determine correctness (handle potentially undefined answer)
+                 const isCorrect = question.answer !== undefined && question.userAnswer === question.answer;
+
+                 resultEl.textContent = isCorrect ? 'Correct!' : 'Incorrect';
+                 resultEl.className = `text-xl font-bold mb-3 ${isCorrect ? 'text-green-400' : 'text-red-400'}`;
+                 explanationEl.classList.add(isCorrect ? 'explanation-correct' : 'explanation-incorrect', isCorrect ? 'bg-green-900/20' : 'bg-red-900/20');
+
+                 // Highlight selected answer (check bounds)
+                 if (question.userAnswer !== undefined && question.userAnswer !== null && optionButtons[question.userAnswer]) {
+                    optionButtons[question.userAnswer].classList.add(isCorrect ? 'bg-green-600' : 'bg-red-600', 'text-white', 'ring-2', isCorrect ? 'ring-green-400' : 'ring-red-400');
+                 }
+                  // Highlight correct answer if incorrect (check bounds)
+                 if (!isCorrect && question.answer !== undefined && optionButtons[question.answer]) {
+                    optionButtons[question.answer].classList.add('bg-green-600', 'text-white', 'ring-2', 'ring-green-400');
+                 }
+
+
+                 feedbackContainer.classList.remove('hidden');
+                 showExplanationBtn.classList.remove('hidden'); // Make button visible
+
+                 // Set initial state of explanation visibility based on forceShowExplanation or if container is currently hidden
+                 if (forceShowExplanation || !explanationContainer.classList.contains('hidden')) {
+                     explanationContainer.classList.remove('hidden');
+                     showExplanationBtn.textContent = 'Hide Explanation';
+                 } else {
+                     explanationContainer.classList.add('hidden');
+                     showExplanationBtn.textContent = 'Show Explanation';
+                 }
+            }
+
+
+             function showEMQAnswerFeedback(baseIndex, subQIndex, forceShowExplanation = false) {
+                  // Ensure EMQ set and sub-question exist and indices are valid
+                  if (baseIndex < 0 || baseIndex >= allQuestions.length || !allQuestions[baseIndex] ||
+                      !Array.isArray(allQuestions[baseIndex].questions) || subQIndex < 0 ||
+                      subQIndex >= allQuestions[baseIndex].questions.length || !allQuestions[baseIndex].questions[subQIndex]) return;
+                 const subQuestion = allQuestions[baseIndex].questions[subQIndex];
+
+
+                 const subQBlock = document.getElementById(`q-${baseIndex}-${subQIndex}`);
+                 if (!subQBlock) return;
+
+                 const optionButtons = subQBlock.querySelectorAll('.option-btn');
+                 const feedbackContainer = document.getElementById(`emq-feedback-${baseIndex}-${subQIndex}`);
+                 const resultEl = document.getElementById(`emq-result-${baseIndex}-${subQIndex}`);
+                 const explanationContainer = document.getElementById(`emq-explanation-container-${baseIndex}-${subQIndex}`);
+                 const explanationEl = document.getElementById(`emq-explanation-${baseIndex}-${subQIndex}`);
+                 const showExplanationBtn = document.getElementById(`emq-show-exp-btn-${baseIndex}-${subQIndex}`);
+
+                 // Check existence of elements before manipulating
+                 if (!feedbackContainer || !resultEl || !explanationContainer || !explanationEl || !showExplanationBtn || !optionButtons.length) {
+                     console.warn(`Missing feedback elements for EMQ ${baseIndex + 1}.${subQIndex + 1}`);
+                     return;
+                 }
+
+
+                 // Reset styles
+                 explanationEl.classList.remove('explanation-correct', 'explanation-incorrect', 'bg-green-900/20', 'bg-red-900/20');
+                 optionButtons.forEach(btn => {
+                     btn.disabled = true; // Always disable
+                     btn.classList.remove('hover:bg-gray-500', 'bg-green-600', 'bg-red-600', 'text-white', 'ring-2', 'ring-green-400', 'ring-red-400');
+                 });
+
+                 // Determine correctness (handle potentially undefined answer)
+                 const isCorrect = subQuestion.answer !== undefined && subQuestion.userAnswer === subQuestion.answer;
+
+                 resultEl.textContent = isCorrect ? 'Correct!' : 'Incorrect';
+                 resultEl.className = `text-xl font-bold mb-3 ${isCorrect ? 'text-green-400' : 'text-red-400'}`;
+                 explanationEl.classList.add(isCorrect ? 'explanation-correct' : 'explanation-incorrect', isCorrect ? 'bg-green-900/20' : 'bg-red-900/20');
+
+                  // Highlight selected answer (check bounds)
+                 if (subQuestion.userAnswer !== undefined && subQuestion.userAnswer !== null && optionButtons[subQuestion.userAnswer]) {
+                     optionButtons[subQuestion.userAnswer].classList.add(isCorrect ? 'bg-green-600' : 'bg-red-600', 'text-white', 'ring-2', isCorrect ? 'ring-green-400' : 'ring-red-400');
+                 }
+                  // Highlight correct answer if incorrect (check bounds)
+                  if (!isCorrect && subQuestion.answer !== undefined && optionButtons[subQuestion.answer]) {
+                      optionButtons[subQuestion.answer].classList.add('bg-green-600', 'text-white', 'ring-2', 'ring-green-400');
+                  }
+
+
+                 feedbackContainer.classList.remove('hidden');
+                 showExplanationBtn.classList.remove('hidden'); // Make button visible
+
+                 // Set initial state of explanation visibility
+                 if (forceShowExplanation || !explanationContainer.classList.contains('hidden')) {
+                     explanationContainer.classList.remove('hidden');
+                     showExplanationBtn.textContent = 'Hide Explanation';
+                 } else {
+                     explanationContainer.classList.add('hidden');
+                     showExplanationBtn.textContent = 'Show Explanation';
+                 }
+            }
+
+
+
+            function showScore() {
+                 let finalScore = 0;
+                 totalQuestionCount = getTotalQuestions(); // Recalculate total just in case
+                 allQuestions.forEach(q => {
+                      if (!q) return; // Skip if question data is missing
+                     // Ensure questions array exists for EMQ sets
+                     if (q.type === 'emq_set' && Array.isArray(q.questions)) {
+                         q.questions.forEach(subQ => {
+                             // Check subQ exists before accessing properties
+                             if (subQ && subQ.userAnswer === subQ.answer) finalScore++;
+                         });
+                     // Check userAnswer exists for MCQs
+                     } else if (q.type === 'mcq' && q.userAnswer === q.answer) {
+                          finalScore++;
+                     }
+                 });
+                // Ensure totalQuestionCount is not zero to avoid division by zero
+                scoreText.textContent = totalQuestionCount > 0 ? `Your Score: ${finalScore} / ${totalQuestionCount}` : 'Quiz Error: No questions found';
+                scoreContainer.classList.remove('hidden');
+                quizContainer.classList.add('hidden');
+                paginationContainer.classList.add('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            function reviewQuiz() {
+                scoreContainer.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                paginationContainer.classList.remove('hidden');
+
+                currentPage = 1; // Start review from page 1
+
+                renderQuiz(); // Re-render the first page in review mode
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+
+            function restartQuiz() {
+                // REMOVED: try { localStorage.removeItem(localStorageKey); } ...
+                totalAnsweredCount = 0;
+                currentPage = 1;
+                allQuestions.forEach(q => {
+                     if (!q) return; // Skip if question data missing
+                    // Ensure questions array exists for EMQ sets
+                    if (q.type === 'emq_set' && Array.isArray(q.questions)) {
+                         // Check subQ exists before resetting
+                        q.questions.forEach(subQ => { if (subQ) subQ.userAnswer = undefined });
+                    } else { // Handles MCQs and potentially malformed EMQs
+                        q.userAnswer = undefined;
+                    }
+                });
+                scoreContainer.classList.add('hidden');
+                quizContainer.classList.remove('hidden');
+                paginationContainer.classList.remove('hidden');
+                 // Ensure progress bar updates correctly on restart
+                 totalQuestionCount = getTotalQuestions(); // Recalculate count
+                updateProgressBar(); // Reset progress bar visual
+                renderQuiz(); // Render the fresh quiz state
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+
+            // --- Initialization ---
+            totalQuestionCount = getTotalQuestions(); // Initial calculation
+             console.log("Total scorable questions calculated:", totalQuestionCount);
+            
+            // REMOVED: if (loadProgress()) { ... }
+            
+            console.log("Starting new quiz session.");
+            // Ensure counts are 0 if no progress loaded
+            totalAnsweredCount = 0;
+            currentPage = 1; // Ensure quiz starts at page 1
+           
+            updateProgressBar(); // Update bar based on initial state (will be 0)
+            renderQuiz(); // Initial render
+
+             // Ensure buttons exist before adding listeners
+            if(restartBtn) restartBtn.addEventListener('click', restartQuiz);
+            if(reviewBtn) reviewBtn.addEventListener('click', reviewQuiz);
+
+            console.log("Comprehensive Respiratory Quiz initialized.");
+
+        }); // --- End of DOMContentLoaded ---
+
+    </script>
+</body>
+</html>
+
